@@ -1,8 +1,16 @@
+import 'package:fake_vinted_app/navigation/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -11,6 +19,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.red,
         ),
         debugShowCheckedModeBanner: false,
-        home:_LoginForm();
+        home: const LoginForm());
   }
 }
