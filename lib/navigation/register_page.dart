@@ -59,6 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: TextField(
               controller: _email,
               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.person),
                 labelText: 'Email',
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.red),
@@ -76,6 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: TextField(
               controller: _password,
               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.lock),
                 labelText: 'Password',
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.red),
@@ -94,6 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: TextField(
               controller: _passwordConfirmation,
               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.lock),
                 labelText: 'Confirm Password',
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.red),
@@ -126,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       borderRadius: BorderRadius.circular(15.0)),
                   primary: Colors.red),
               label: const Text(
-                "Sign Up",
+                "Register",
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
               icon: const Icon(Icons.login),

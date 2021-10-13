@@ -77,6 +77,7 @@ class __LoginFormState extends State<LoginForm> {
             child: TextField(
               controller: _email,
               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.person),
                 labelText: 'Login',
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.red),
@@ -94,6 +95,7 @@ class __LoginFormState extends State<LoginForm> {
             child: TextField(
               controller: _password,
               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.lock),
                 labelText: 'Password',
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.red),
