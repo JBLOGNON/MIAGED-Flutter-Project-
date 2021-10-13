@@ -15,6 +15,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _password = TextEditingController();
   final TextEditingController _passwordConfirmation = TextEditingController();
 
+  var hidePassword = true;
+  var hideConfirmPassword = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +82,14 @@ class _RegisterPageState extends State<RegisterPage> {
               controller: _password,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.lock),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      hidePassword = !hidePassword;
+                    });
+                  },
+                  icon: Icon(Icons.visibility),
+                ),
                 labelText: 'Password',
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.red),
@@ -89,7 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              obscureText: true,
+              obscureText: hidePassword,
             ),
           ),
           Container(
@@ -98,6 +109,14 @@ class _RegisterPageState extends State<RegisterPage> {
               controller: _passwordConfirmation,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.lock),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      hideConfirmPassword = !hideConfirmPassword;
+                    });
+                  },
+                  icon: Icon(Icons.visibility),
+                ),
                 labelText: 'Confirm Password',
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.red),
@@ -108,7 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              obscureText: true,
+              obscureText: hideConfirmPassword,
             ),
           )
         ],

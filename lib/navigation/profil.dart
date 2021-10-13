@@ -29,39 +29,47 @@ class __ProfilState extends State<Profil> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.all(20.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        //border: Border.all(color: Colors.red, width: 0.5),
-        color: Colors.red[50],
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
+    return Scrollbar(
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
-              child: Column(
-                children: <Widget>[
-                  _buildModificationButton(),
-                  _buildInformationField(),
+              padding: const EdgeInsets.all(16.0),
+              margin: const EdgeInsets.all(20.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                //border: Border.all(color: Colors.red, width: 0.5),
+                color: Colors.red[50],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3),
+                  ),
                 ],
               ),
-            ),
-            Container(
+              //child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  _buildLogout(context),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        _buildModificationButton(),
+                        _buildInformationField(),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        _buildLogout(context),
+                      ],
+                    ),
+                  ),
                 ],
               ),
+              //),
             ),
           ],
         ),
@@ -125,6 +133,16 @@ class __ProfilState extends State<Profil> {
           return Container(
             child: Column(
               children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 20.0),
+                  child: Text(
+                    "Account Informations",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 117, 117, 117),
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
                 Container(
                   padding: const EdgeInsets.all(5.0),
                   child: TextField(
@@ -154,6 +172,16 @@ class __ProfilState extends State<Profil> {
                     ),
                   ),
                 ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
+                  child: Text(
+                    "Personal Informations",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 117, 117, 117),
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
                 Container(
                   padding: const EdgeInsets.all(5.0),
                   child: TextField(
@@ -164,7 +192,7 @@ class __ProfilState extends State<Profil> {
                       border: OutlineInputBorder(),
                       fillColor: Colors.white,
                       filled: true,
-                      labelText: 'Anniversaire',
+                      labelText: 'Birthday',
                     ),
                     onTap: () async {
                       var date = await showDatePicker(
@@ -192,7 +220,7 @@ class __ProfilState extends State<Profil> {
                       border: OutlineInputBorder(),
                       fillColor: Colors.white,
                       filled: true,
-                      labelText: 'Adresse',
+                      labelText: 'Adress',
                     ),
                   ),
                 ),
@@ -207,7 +235,7 @@ class __ProfilState extends State<Profil> {
                       border: OutlineInputBorder(),
                       fillColor: Colors.white,
                       filled: true,
-                      labelText: 'Code Postal',
+                      labelText: 'Zip Code',
                     ),
                   ),
                 ),
@@ -221,7 +249,7 @@ class __ProfilState extends State<Profil> {
                       border: OutlineInputBorder(),
                       fillColor: Colors.white,
                       filled: true,
-                      labelText: 'Ville',
+                      labelText: 'Town',
                     ),
                   ),
                 ),
@@ -232,8 +260,6 @@ class __ProfilState extends State<Profil> {
         return const CircularProgressIndicator();
       },
     );
-
-    /**/
   }
 
   Widget _buildLogout(BuildContext context) {
@@ -259,7 +285,11 @@ class __ProfilState extends State<Profil> {
                   icon: const Icon(Icons.logout),
                   onPressed: () async {
                     await FirebaseAuth.instance.signOut();
-                    FirebaseAuth.instance
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginForm()));
+                    /*FirebaseAuth.instance
                         .authStateChanges()
                         .listen((User? user) {
                       if (user == null) {
@@ -271,7 +301,7 @@ class __ProfilState extends State<Profil> {
                         // ignore: avoid_print
                         print('User is signed in!');
                       }
-                    });
+                    });*/
                   },
                 ),
               )
@@ -309,5 +339,34 @@ class __ProfilState extends State<Profil> {
         print(e);
       }
     }
+
+    showMyDialog('Your information has successfully been updated.');
+  }
+
+  Future<void> showMyDialog(String errorText) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Congratulation'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(errorText),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Accept'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

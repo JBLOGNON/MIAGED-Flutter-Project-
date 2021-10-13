@@ -14,6 +14,8 @@ class __LoginFormState extends State<LoginForm> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
+  var hidePassword = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,6 +99,14 @@ class __LoginFormState extends State<LoginForm> {
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.lock),
                 labelText: 'Password',
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      hidePassword = !hidePassword;
+                    });
+                  },
+                  icon: Icon(Icons.visibility),
+                ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.red),
                   borderRadius: BorderRadius.circular(15),
@@ -106,7 +116,7 @@ class __LoginFormState extends State<LoginForm> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              obscureText: true,
+              obscureText: hidePassword,
             ),
           )
         ],
