@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_vinted_app/navigation/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -147,6 +148,19 @@ class _RegisterPageState extends State<RegisterPage> {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: _email.text, password: _password.text);
+
+        var currentUser = FirebaseAuth.instance.currentUser;
+
+        Future<void> users = FirebaseFirestore.instance
+            .collection('UserInformations')
+            .doc(currentUser!.uid)
+            .set({
+          'Adress': 'Entrez une adresse',
+          'Birthday': DateTime.now(),
+          'City': 'Entrez une ville',
+          'Postal': 'Entrez un code postal',
+        });
+
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const LoginForm()));
       } on FirebaseAuthException catch (e) {

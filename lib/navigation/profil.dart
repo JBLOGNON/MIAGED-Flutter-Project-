@@ -34,8 +34,16 @@ class __ProfilState extends State<Profil> {
       margin: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.red, width: 4),
+        //border: Border.all(color: Colors.red, width: 0.5),
         color: Colors.red[50],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -48,19 +56,13 @@ class __ProfilState extends State<Profil> {
                 ],
               ),
             ),
-            /*Expanded(
-              child:*/
             Container(
               child: Column(
-                /*crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,*/
                 children: <Widget>[
                   _buildLogout(context),
                 ],
               ),
             ),
-            //)
           ],
         ),
       ),
@@ -84,8 +86,8 @@ class __ProfilState extends State<Profil> {
               });
             },
             child: profilEdit
-                ? Icon(Icons.check, color: Colors.white)
-                : Icon(Icons.create, color: Colors.white),
+                ? const Icon(Icons.check, color: Colors.white)
+                : const Icon(Icons.create, color: Colors.white),
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
               padding: const EdgeInsets.all(20),
@@ -104,24 +106,22 @@ class __ProfilState extends State<Profil> {
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text("Something went wrong");
+          return const Text("Something went wrong");
         }
 
         if (snapshot.hasData && !snapshot.data!.exists) {
-          return Text("Document does not exist");
+          return const Text("Document does not exist");
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
-          //return Text("Ville: ${data['City']}");
-          emailController..text = currentUser!.email!;
-          //passwordController..text = ;
-          anniversaireController
-            ..text = "${formatter.format(data['Birthday'].toDate())}";
-          adresseController..text = data['Adress'];
-          zipCodeController..text = data['Postal'];
-          villeController..text = data['City'];
+          emailController.text = currentUser!.email!;
+          anniversaireController.text =
+              formatter.format(data['Birthday'].toDate());
+          adresseController.text = data['Adress'];
+          zipCodeController.text = data['Postal'];
+          villeController.text = data['City'];
           return Container(
             child: Column(
               children: <Widget>[
@@ -142,6 +142,7 @@ class __ProfilState extends State<Profil> {
                 Container(
                   padding: const EdgeInsets.all(5.0),
                   child: TextField(
+                    controller: passwordController,
                     enabled: profilEdit,
                     obscureText: true,
                     decoration: const InputDecoration(
@@ -156,24 +157,30 @@ class __ProfilState extends State<Profil> {
                 Container(
                   padding: const EdgeInsets.all(5.0),
                   child: TextField(
-                      controller: anniversaireController,
-                      enabled: profilEdit,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.cake),
-                        border: OutlineInputBorder(),
-                        fillColor: Colors.white,
-                        filled: true,
-                        labelText: 'Anniversaire',
-                      ),
-                      onTap: () async {
-                        var date = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime(2100));
+                    controller: anniversaireController,
+                    enabled: profilEdit,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.cake),
+                      border: OutlineInputBorder(),
+                      fillColor: Colors.white,
+                      filled: true,
+                      labelText: 'Anniversaire',
+                    ),
+                    onTap: () async {
+                      var date = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
+                      );
+                      if (date == null) {
+                        DateTime.now().toString().substring(0, 10);
+                      } else {
                         anniversaireController.text =
                             date.toString().substring(0, 10);
-                      }),
+                      }
+                    },
+                  ),
                 ),
                 Container(
                   padding: const EdgeInsets.all(5.0),
@@ -222,7 +229,7 @@ class __ProfilState extends State<Profil> {
             ),
           );
         }
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       },
     );
 
@@ -261,6 +268,7 @@ class __ProfilState extends State<Profil> {
                             MaterialPageRoute(
                                 builder: (context) => const LoginForm()));
                       } else {
+                        // ignore: avoid_print
                         print('User is signed in!');
                       }
                     });
@@ -274,23 +282,32 @@ class __ProfilState extends State<Profil> {
     );
   }
 
-  void saveProfilInformationToFirebase() {
-    var anniversaire = anniversaireController.text;
+  Future<void> saveProfilInformationToFirebase() async {
+    var anniversaire =
+        Timestamp.fromDate(DateTime.parse(anniversaireController.text));
     var adresse = adresseController.text;
     var zipcode = zipCodeController.text;
     var ville = villeController.text;
 
-    //Verifier le format de la date
-
     try {
       users.doc(currentUser!.uid).update({
-        //"Birthday": anniversaire,
+        "Birthday": anniversaire,
         "Adress": adresse,
         "Postal": zipcode,
         "City": ville
       });
     } catch (e) {
-      //print(e.message);
+      // ignore: avoid_print
+      print(e);
+    }
+
+    if (passwordController.text != '') {
+      try {
+        await currentUser!.updatePassword(passwordController.text);
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
     }
   }
 }
