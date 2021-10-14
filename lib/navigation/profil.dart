@@ -32,48 +32,50 @@ class __ProfilState extends State<Profil> {
     return Scrollbar(
       child: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              margin: const EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                //border: Border.all(color: Colors.red, width: 0.5),
-                color: Colors.red[50],
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              //child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        _buildModificationButton(),
-                        _buildInformationField(),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        _buildLogout(context),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              //),
-            ),
-          ],
+          children: <Widget>[_buildInformationContainer()],
         ),
       ),
+    );
+  }
+
+  Widget _buildInformationContainer() {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(20.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        //border: Border.all(color: Colors.red, width: 0.5),
+        color: Colors.red[50],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      //child: SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Column(
+              children: <Widget>[
+                _buildModificationButton(),
+                _buildInformationField(),
+              ],
+            ),
+          ),
+          Container(
+            child: Column(
+              children: <Widget>[
+                _buildLogout(context),
+              ],
+            ),
+          ),
+        ],
+      ),
+      //),
     );
   }
 
@@ -130,134 +132,150 @@ class __ProfilState extends State<Profil> {
           adresseController.text = data['Adress'];
           zipCodeController.text = data['Postal'];
           villeController.text = data['City'];
-          return Container(
-            child: Column(
-              children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 20.0),
-                  child: Text(
-                    "Account Informations",
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 117, 117, 117),
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold),
+        } // A decommenter si on veut le loading circle
+
+        return Container(
+          child: Column(
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.only(top: 15.0, bottom: 20.0),
+                child: Text(
+                  "Account Informations",
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 117, 117, 117),
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                child: TextField(
+                  controller: emailController,
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.email),
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.white,
+                    filled: true,
+                    labelText: 'Email',
+                    labelStyle: TextStyle(fontSize: 20),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  child: TextField(
-                    controller: emailController,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.email),
-                      border: OutlineInputBorder(),
-                      fillColor: Colors.white,
-                      filled: true,
-                      labelText: 'Email',
-                    ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                child: TextField(
+                  controller: passwordController,
+                  enabled: profilEdit,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.lock),
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.white,
+                    filled: true,
+                    labelText: 'Password',
+                    labelStyle: TextStyle(fontSize: 20),
+                    hintText: '********',
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  child: TextField(
-                    controller: passwordController,
-                    enabled: profilEdit,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
-                      border: OutlineInputBorder(),
-                      fillColor: Colors.white,
-                      filled: true,
-                      labelText: 'Password',
-                    ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
+                child: Text(
+                  "Personal Informations",
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 117, 117, 117),
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                child: TextField(
+                  controller: anniversaireController,
+                  enabled: profilEdit,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.cake),
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.white,
+                    filled: true,
+                    labelText: 'Birthday',
+                    labelStyle: TextStyle(fontSize: 20),
+                  ),
+                  onTap: () async {
+                    var date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                    );
+                    if (date == null) {
+                      DateTime.now().toString().substring(0, 10);
+                    } else {
+                      anniversaireController.text =
+                          date.toString().substring(0, 10);
+                    }
+                  },
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                child: TextField(
+                  controller: adresseController,
+                  enabled: profilEdit,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.home),
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.white,
+                    filled: true,
+                    labelText: 'Adress',
+                    labelStyle: TextStyle(fontSize: 20),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
-                  child: Text(
-                    "Personal Informations",
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 117, 117, 117),
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold),
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                child: TextField(
+                  controller: zipCodeController,
+                  enabled: profilEdit,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.fmd_good),
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.white,
+                    filled: true,
+                    labelText: 'Zip Code',
+                    labelStyle: TextStyle(fontSize: 20),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  child: TextField(
-                    controller: anniversaireController,
-                    enabled: profilEdit,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.cake),
-                      border: OutlineInputBorder(),
-                      fillColor: Colors.white,
-                      filled: true,
-                      labelText: 'Birthday',
-                    ),
-                    onTap: () async {
-                      var date = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2100),
-                      );
-                      if (date == null) {
-                        DateTime.now().toString().substring(0, 10);
-                      } else {
-                        anniversaireController.text =
-                            date.toString().substring(0, 10);
-                      }
-                    },
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                child: TextField(
+                  controller: villeController,
+                  enabled: profilEdit,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.location_city),
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.white,
+                    filled: true,
+                    labelText: 'Town',
+                    labelStyle: TextStyle(fontSize: 20),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  child: TextField(
-                    controller: adresseController,
-                    enabled: profilEdit,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.home),
-                      border: OutlineInputBorder(),
-                      fillColor: Colors.white,
-                      filled: true,
-                      labelText: 'Adress',
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  child: TextField(
-                    controller: zipCodeController,
-                    enabled: profilEdit,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.fmd_good),
-                      border: OutlineInputBorder(),
-                      fillColor: Colors.white,
-                      filled: true,
-                      labelText: 'Zip Code',
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  child: TextField(
-                    controller: villeController,
-                    enabled: profilEdit,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.location_city),
-                      border: OutlineInputBorder(),
-                      fillColor: Colors.white,
-                      filled: true,
-                      labelText: 'Town',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-        return const CircularProgressIndicator();
+              ),
+            ],
+          ),
+        );
+        //}
+        //return const CircularProgressIndicator();
       },
     );
   }
@@ -334,13 +352,12 @@ class __ProfilState extends State<Profil> {
     if (passwordController.text != '') {
       try {
         await currentUser!.updatePassword(passwordController.text);
+        showMyDialog('Your password has successfully been updated.');
       } catch (e) {
         // ignore: avoid_print
         print(e);
       }
     }
-
-    showMyDialog('Your information has successfully been updated.');
   }
 
   Future<void> showMyDialog(String errorText) async {
