@@ -63,7 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: TextField(
               controller: _email,
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.person),
+                prefixIcon: const Icon(Icons.person),
                 labelText: 'Email',
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.red),
@@ -81,14 +81,14 @@ class _RegisterPageState extends State<RegisterPage> {
             child: TextField(
               controller: _password,
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.lock),
+                prefixIcon: const Icon(Icons.lock),
                 suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
                       hidePassword = !hidePassword;
                     });
                   },
-                  icon: Icon(Icons.visibility),
+                  icon: const Icon(Icons.visibility),
                 ),
                 labelText: 'Password',
                 enabledBorder: OutlineInputBorder(
@@ -108,14 +108,14 @@ class _RegisterPageState extends State<RegisterPage> {
             child: TextField(
               controller: _passwordConfirmation,
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.lock),
+                prefixIcon: const Icon(Icons.lock),
                 suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
                       hideConfirmPassword = !hideConfirmPassword;
                     });
                   },
-                  icon: Icon(Icons.visibility),
+                  icon: const Icon(Icons.visibility),
                 ),
                 labelText: 'Confirm Password',
                 enabledBorder: OutlineInputBorder(

@@ -2,6 +2,7 @@ import 'package:fake_vinted_app/navigation/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class Profil extends StatefulWidget {
@@ -13,6 +14,8 @@ class Profil extends StatefulWidget {
 
 class __ProfilState extends State<Profil> {
   bool profilEdit = false;
+
+  final _formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -44,7 +47,6 @@ class __ProfilState extends State<Profil> {
       margin: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        //border: Border.all(color: Colors.red, width: 0.5),
         color: Colors.red[50],
         boxShadow: [
           BoxShadow(
@@ -55,17 +57,10 @@ class __ProfilState extends State<Profil> {
           ),
         ],
       ),
-      //child: SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          Container(
-            child: Column(
-              children: <Widget>[
-                _buildModificationButton(),
-                _buildInformationField(),
-              ],
-            ),
-          ),
+          _buildModificationButton(),
+          _buildInformationField(),
           Container(
             child: Column(
               children: <Widget>[
@@ -75,7 +70,6 @@ class __ProfilState extends State<Profil> {
           ),
         ],
       ),
-      //),
     );
   }
 
@@ -90,8 +84,10 @@ class __ProfilState extends State<Profil> {
                 if (profilEdit == false) {
                   profilEdit = true;
                 } else {
-                  saveProfilInformationToFirebase();
-                  profilEdit = false;
+                  if (_formKey.currentState!.validate()) {
+                    saveProfilInformationToFirebase();
+                    profilEdit = false;
+                  }
                 }
               });
             },
@@ -137,138 +133,173 @@ class __ProfilState extends State<Profil> {
         return Container(
           child: Column(
             children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.only(top: 15.0, bottom: 20.0),
-                child: Text(
-                  "Account Informations",
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 117, 117, 117),
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(
-                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                child: TextField(
-                  controller: emailController,
-                  readOnly: true,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.email),
-                    border: OutlineInputBorder(),
-                    fillColor: Colors.white,
-                    filled: true,
-                    labelText: 'Email',
-                    labelStyle: TextStyle(fontSize: 20),
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(
-                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                child: TextField(
-                  controller: passwordController,
-                  enabled: profilEdit,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(),
-                    fillColor: Colors.white,
-                    filled: true,
-                    labelText: 'Password',
-                    labelStyle: TextStyle(fontSize: 20),
-                    hintText: '********',
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
-                child: Text(
-                  "Personal Informations",
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 117, 117, 117),
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(
-                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                child: TextField(
-                  controller: anniversaireController,
-                  enabled: profilEdit,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.cake),
-                    border: OutlineInputBorder(),
-                    fillColor: Colors.white,
-                    filled: true,
-                    labelText: 'Birthday',
-                    labelStyle: TextStyle(fontSize: 20),
-                  ),
-                  onTap: () async {
-                    var date = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100),
-                    );
-                    if (date == null) {
-                      DateTime.now().toString().substring(0, 10);
-                    } else {
-                      anniversaireController.text =
-                          date.toString().substring(0, 10);
-                    }
-                  },
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(
-                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                child: TextField(
-                  controller: adresseController,
-                  enabled: profilEdit,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.home),
-                    border: OutlineInputBorder(),
-                    fillColor: Colors.white,
-                    filled: true,
-                    labelText: 'Adress',
-                    labelStyle: TextStyle(fontSize: 20),
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(
-                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                child: TextField(
-                  controller: zipCodeController,
-                  enabled: profilEdit,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.fmd_good),
-                    border: OutlineInputBorder(),
-                    fillColor: Colors.white,
-                    filled: true,
-                    labelText: 'Zip Code',
-                    labelStyle: TextStyle(fontSize: 20),
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(
-                    top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                child: TextField(
-                  controller: villeController,
-                  enabled: profilEdit,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.location_city),
-                    border: OutlineInputBorder(),
-                    fillColor: Colors.white,
-                    filled: true,
-                    labelText: 'Town',
-                    labelStyle: TextStyle(fontSize: 20),
-                  ),
+              Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.always,
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 15.0, bottom: 20.0),
+                      child: Text(
+                        "Account Informations",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 117, 117, 117),
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                      child: TextFormField(
+                        controller: emailController,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.email),
+                          border: OutlineInputBorder(),
+                          fillColor: Colors.white,
+                          filled: true,
+                          labelText: 'Email',
+                          labelStyle: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                      child: TextFormField(
+                        controller: passwordController,
+                        enabled: profilEdit,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.lock),
+                          border: OutlineInputBorder(),
+                          fillColor: Colors.white,
+                          filled: true,
+                          labelText: 'Password',
+                          labelStyle: TextStyle(fontSize: 20),
+                          hintText: '********',
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
+                      child: Text(
+                        "Personal Informations",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 117, 117, 117),
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                      child: TextFormField(
+                        controller: anniversaireController,
+                        enabled: profilEdit,
+                        validator: (value) {
+                          RegExp regexDate = RegExp(
+                              r'^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$');
+                          if (value!.isEmpty) {
+                            return "Field is Empty";
+                          } else if (!regexDate.hasMatch(value)) {
+                            return "Invalid date format";
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.cake),
+                          border: OutlineInputBorder(),
+                          fillColor: Colors.white,
+                          filled: true,
+                          labelText: 'Birthday',
+                          labelStyle: TextStyle(fontSize: 20),
+                        ),
+                        onTap: () async {
+                          var date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime(2100),
+                          );
+                          if (date == null) {
+                            DateTime.now().toString().substring(0, 10);
+                          } else {
+                            anniversaireController.text =
+                                date.toString().substring(0, 10);
+                          }
+                        },
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                      child: TextFormField(
+                        controller: adresseController,
+                        enabled: profilEdit,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Field is Empty";
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.home),
+                          border: OutlineInputBorder(),
+                          fillColor: Colors.white,
+                          filled: true,
+                          labelText: 'Adress',
+                          labelStyle: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                      child: TextFormField(
+                        controller: zipCodeController,
+                        enabled: profilEdit,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Field is Empty";
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.fmd_good),
+                          border: OutlineInputBorder(),
+                          fillColor: Colors.white,
+                          filled: true,
+                          labelText: 'Zip Code',
+                          labelStyle: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(
+                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                      child: TextFormField(
+                        controller: villeController,
+                        enabled: profilEdit,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Field is Empty";
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.location_city),
+                          border: OutlineInputBorder(),
+                          fillColor: Colors.white,
+                          filled: true,
+                          labelText: 'Town',
+                          labelStyle: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -352,21 +383,21 @@ class __ProfilState extends State<Profil> {
     if (passwordController.text != '') {
       try {
         await currentUser!.updatePassword(passwordController.text);
-        showMyDialog('Your password has successfully been updated.');
+        showMyDialog(
+            "Congratulation", 'Your password has successfully been updated.');
       } catch (e) {
-        // ignore: avoid_print
-        print(e);
+        showMyDialog("Error", e.toString());
       }
     }
   }
 
-  Future<void> showMyDialog(String errorText) async {
+  Future<void> showMyDialog(String typeReturn, String errorText) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Congratulation'),
+          title: Text(typeReturn),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
