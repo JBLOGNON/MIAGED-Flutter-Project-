@@ -1,5 +1,10 @@
+import 'dart:developer';
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Acheter extends StatefulWidget {
   const Acheter({Key? key}) : super(key: key);
@@ -9,9 +14,6 @@ class Acheter extends StatefulWidget {
 }
 
 class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
-  final Stream<QuerySnapshot> _productsStream =
-      FirebaseFirestore.instance.collection('Products').snapshots();
-
   /* TAB BAR VARIABLES*/
 
   // this will control the button clicks and tab changing
@@ -45,12 +47,12 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
 
   // these will be our tab icons. You can use whatever you like for the content of your buttons
   final List _icons = [
-    Icons.all_inclusive,
-    Icons.whatshot,
-    Icons.call,
-    Icons.contacts,
-    Icons.email,
-    Icons.donut_large
+    FontAwesomeIcons.infinity,
+    FontAwesomeIcons.hatCowboySide,
+    FontAwesomeIcons.tshirt,
+    FontAwesomeIcons.tshirt,
+    FontAwesomeIcons.socks,
+    FontAwesomeIcons.ring,
   ];
 
   // active button's foreground color
@@ -146,7 +148,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
                           _scrollTo(index);
                         });
                       },
-                      child: Icon(
+                      child: FaIcon(
                         _icons[index],
                         color: _getForegroundColor(index),
                       ),
@@ -162,11 +164,11 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
             controller: _controller,
             children: <Widget>[
               _generateProduct(),
-              Icon(_icons[1]),
-              Icon(_icons[2]),
-              Icon(_icons[3]),
-              Icon(_icons[4]),
-              Icon(_icons[5])
+              FaIcon(_icons[1]),
+              FaIcon(_icons[2]),
+              FaIcon(_icons[3]),
+              _generateProductShoes(),
+              FaIcon(_icons[5])
             ],
           ),
         ),
@@ -175,8 +177,151 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
   }
 
   _generateProduct() {
+    Stream<QuerySnapshot> _productsStream =
+        FirebaseFirestore.instance.collection('Products').snapshots();
+
     return StreamBuilder<QuerySnapshot>(
       stream: _productsStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container(
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  alignment: AlignmentDirectional.center,
+                  decoration: const BoxDecoration(
+                    color: Colors.white70,
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.red[100],
+                        borderRadius: BorderRadius.circular(10.0)),
+                    width: 300.0,
+                    height: 200.0,
+                    alignment: AlignmentDirectional.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const Center(
+                          child: SizedBox(
+                            height: 50.0,
+                            width: 50.0,
+                            child: CircularProgressIndicator(
+                              value: null,
+                              strokeWidth: 7.0,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 25.0),
+                          child: const Center(
+                            child: Text(
+                              "Loading...",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return ListView(
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> data =
+                document.data()! as Map<String, dynamic>;
+            return Container(
+              margin: const EdgeInsets.only(
+                  top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                    side: BorderSide(
+                      color: Colors.grey.withOpacity(0.3),
+                      width: 2,
+                    )),
+                child: InkWell(
+                  splashColor: Colors.red.withAlpha(30),
+                  onTap: () {},
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: Image.network(
+                          data["productImages"][0],
+                          height: 100,
+                          width: 100,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              data["productBrand"],
+                              style: const TextStyle(
+                                  color: Colors.red, fontSize: 18),
+                              textAlign: TextAlign.left,
+                            ),
+                            Text(
+                                data["productName"] +
+                                    " (" +
+                                    data["productSize"].toString() +
+                                    ")",
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                                textAlign: TextAlign.left),
+                            Text(
+                              data["productPrice"].toString() + "€",
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Expanded(child: SizedBox()),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: IconButton(
+                          onPressed: () {},
+                          color: Colors.red,
+                          icon: const Icon(
+                            Icons.shopping_cart,
+                            size: 25,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  _generateProductShoes() {
+    Stream<QuerySnapshot> _productsStreamShoes = FirebaseFirestore.instance
+        .collection('Products')
+        .where("productType", isEqualTo: "Shoes")
+        .snapshots();
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: _productsStreamShoes,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Text('Something went wrong');
@@ -325,6 +470,8 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
 
   // runs when the displayed tab changes
   _handleTabChange() {
+    //print(_controller.index);
+    if (_controller.index == 1) {}
     // if a button was tapped, change the current index
     if (_buttonTap) _setCurrentIndex(_controller.index);
 
