@@ -19,7 +19,6 @@ class _HomePageState extends State<HomePage> {
 
   Widget _Acheter = Acheter();
   Widget _Panier = Panier();
-  //Widget _Profil = Profil(enable: profilTextFieldEnable);
   Widget _Profil = Profil();
 
   @override
