@@ -75,8 +75,8 @@ class __AcheterState extends State<Acheter> {
                 document.data()! as Map<String, dynamic>;
             return Container(
               margin: const EdgeInsets.only(
-                  top: 15.0, bottom: 15.0, left: 20.0, right: 20.0),
-              decoration: BoxDecoration(
+                  top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
+              /*decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.white,
                 boxShadow: [
@@ -87,18 +87,27 @@ class __AcheterState extends State<Acheter> {
                     offset: const Offset(0, 3),
                   ),
                 ],
-              ),
+              ),*/
               child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                    side: BorderSide(
+                      color: Colors.grey.withOpacity(0.3),
+                      width: 2,
+                    )),
                 child: InkWell(
                   splashColor: Colors.red.withAlpha(30),
                   onTap: () {},
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Image.network(
-                        data["productImages"][0],
-                        height: 100,
-                        width: 100,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: Image.network(
+                          data["productImages"][0],
+                          height: 100,
+                          width: 100,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
