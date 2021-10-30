@@ -18,6 +18,9 @@ class _RegisterPageState extends State<RegisterPage> {
   var hidePassword = true;
   var hideConfirmPassword = true;
 
+  Icon visibilityIcon = Icon(Icons.visibility);
+  Icon visibilityIconConfirm = Icon(Icons.visibility);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,9 +89,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   onPressed: () {
                     setState(() {
                       hidePassword = !hidePassword;
+                      if (hidePassword) {
+                        visibilityIcon = Icon(Icons.visibility);
+                      } else {
+                        visibilityIcon = Icon(Icons.visibility_off);
+                      }
                     });
                   },
-                  icon: const Icon(Icons.visibility),
+                  icon: visibilityIcon,
                 ),
                 labelText: 'Password',
                 enabledBorder: OutlineInputBorder(
@@ -113,9 +121,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   onPressed: () {
                     setState(() {
                       hideConfirmPassword = !hideConfirmPassword;
+                      if (hideConfirmPassword) {
+                        visibilityIconConfirm = Icon(Icons.visibility);
+                      } else {
+                        visibilityIconConfirm = Icon(Icons.visibility_off);
+                      }
                     });
                   },
-                  icon: const Icon(Icons.visibility),
+                  icon: visibilityIconConfirm,
                 ),
                 labelText: 'Confirm Password',
                 enabledBorder: OutlineInputBorder(

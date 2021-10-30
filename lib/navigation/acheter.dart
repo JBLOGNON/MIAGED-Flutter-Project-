@@ -231,6 +231,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
                     )),
                 child: InkWell(
                   splashColor: Colors.red.withAlpha(30),
+                  borderRadius: BorderRadius.circular(15.0),
                   onTap: () {},
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,

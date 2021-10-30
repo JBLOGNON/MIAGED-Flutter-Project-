@@ -15,6 +15,7 @@ class __LoginFormState extends State<LoginForm> {
   final TextEditingController _password = TextEditingController();
 
   var hidePassword = true;
+  Icon visibilityIcon = Icon(Icons.visibility);
 
   @override
   Widget build(BuildContext context) {
@@ -103,9 +104,14 @@ class __LoginFormState extends State<LoginForm> {
                   onPressed: () {
                     setState(() {
                       hidePassword = !hidePassword;
+                      if (hidePassword) {
+                        visibilityIcon = Icon(Icons.visibility);
+                      } else {
+                        visibilityIcon = Icon(Icons.visibility_off);
+                      }
                     });
                   },
-                  icon: Icon(Icons.visibility),
+                  icon: visibilityIcon,
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.red),
