@@ -18,8 +18,8 @@ class _RegisterPageState extends State<RegisterPage> {
   var hidePassword = true;
   var hideConfirmPassword = true;
 
-  Icon visibilityIcon = Icon(Icons.visibility);
-  Icon visibilityIconConfirm = Icon(Icons.visibility);
+  Icon visibilityIcon = const Icon(Icons.visibility);
+  Icon visibilityIconConfirm = const Icon(Icons.visibility);
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +90,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     setState(() {
                       hidePassword = !hidePassword;
                       if (hidePassword) {
-                        visibilityIcon = Icon(Icons.visibility);
+                        visibilityIcon = const Icon(Icons.visibility);
                       } else {
-                        visibilityIcon = Icon(Icons.visibility_off);
+                        visibilityIcon = const Icon(Icons.visibility_off);
                       }
                     });
                   },
@@ -122,9 +122,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     setState(() {
                       hideConfirmPassword = !hideConfirmPassword;
                       if (hideConfirmPassword) {
-                        visibilityIconConfirm = Icon(Icons.visibility);
+                        visibilityIconConfirm = const Icon(Icons.visibility);
                       } else {
-                        visibilityIconConfirm = Icon(Icons.visibility_off);
+                        visibilityIconConfirm =
+                            const Icon(Icons.visibility_off);
                       }
                     });
                   },
@@ -177,9 +178,8 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> _signupPressed() async {
     if (_password.text == _passwordConfirmation.text) {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: _email.text, password: _password.text);
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: _email.text, password: _password.text);
 
         var currentUser = FirebaseAuth.instance.currentUser;
 

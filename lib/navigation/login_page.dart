@@ -15,7 +15,7 @@ class __LoginFormState extends State<LoginForm> {
   final TextEditingController _password = TextEditingController();
 
   var hidePassword = true;
-  Icon visibilityIcon = Icon(Icons.visibility);
+  Icon visibilityIcon = const Icon(Icons.visibility);
 
   @override
   Widget build(BuildContext context) {
@@ -32,25 +32,21 @@ class __LoginFormState extends State<LoginForm> {
         margin: const EdgeInsets.only(top: 50.0),
         child: Column(
           children: <Widget>[
-            Container(
-              child: Column(
-                children: <Widget>[
-                  _buildWelcomeText(),
-                  _buildInputField(),
-                  _buildLoginButton(),
-                ],
-              ),
+            Column(
+              children: <Widget>[
+                _buildWelcomeText(),
+                _buildInputField(),
+                _buildLoginButton(),
+              ],
             ),
             Expanded(
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    _buildRegisterButton(),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  _buildRegisterButton(),
+                ],
               ),
             )
           ],
@@ -72,61 +68,59 @@ class __LoginFormState extends State<LoginForm> {
   }
 
   Widget _buildInputField() {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(15.0),
-            child: TextField(
-              controller: _email,
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.person),
-                labelText: 'Login',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.red),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 3, color: Colors.red.shade900),
-                  borderRadius: BorderRadius.circular(15),
-                ),
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(15.0),
+          child: TextField(
+            controller: _email,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.person),
+              labelText: 'Login',
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 3, color: Colors.red),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 3, color: Colors.red.shade900),
+                borderRadius: BorderRadius.circular(15),
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(15.0),
-            child: TextField(
-              controller: _password,
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.lock),
-                labelText: 'Password',
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      hidePassword = !hidePassword;
-                      if (hidePassword) {
-                        visibilityIcon = Icon(Icons.visibility);
-                      } else {
-                        visibilityIcon = Icon(Icons.visibility_off);
-                      }
-                    });
-                  },
-                  icon: visibilityIcon,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.red),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 3, color: Colors.red.shade900),
-                  borderRadius: BorderRadius.circular(15),
-                ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(15.0),
+          child: TextField(
+            controller: _password,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.lock),
+              labelText: 'Password',
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    hidePassword = !hidePassword;
+                    if (hidePassword) {
+                      visibilityIcon = const Icon(Icons.visibility);
+                    } else {
+                      visibilityIcon = const Icon(Icons.visibility_off);
+                    }
+                  });
+                },
+                icon: visibilityIcon,
               ),
-              obscureText: hidePassword,
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 3, color: Colors.red),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 3, color: Colors.red.shade900),
+                borderRadius: BorderRadius.circular(15),
+              ),
             ),
-          )
-        ],
-      ),
+            obscureText: hidePassword,
+          ),
+        )
+      ],
     );
   }
 
@@ -193,9 +187,8 @@ class __LoginFormState extends State<LoginForm> {
 
   Future<void> _loginPressed() async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: _email.text, password: _password.text);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _email.text, password: _password.text);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
     } on FirebaseAuthException catch (e) {

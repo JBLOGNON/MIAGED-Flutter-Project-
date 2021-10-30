@@ -305,8 +305,6 @@ class __ProfilState extends State<Profil> {
             ],
           ),
         );
-        //}
-        //return const CircularProgressIndicator();
       },
     );
   }
@@ -338,19 +336,6 @@ class __ProfilState extends State<Profil> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const LoginForm()));
-                    /*FirebaseAuth.instance
-                        .authStateChanges()
-                        .listen((User? user) {
-                      if (user == null) {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginForm()));
-                      } else {
-                        // ignore: avoid_print
-                        print('User is signed in!');
-                      }
-                    });*/
                   },
                 ),
               )
