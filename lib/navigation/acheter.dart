@@ -14,6 +14,14 @@ class Acheter extends StatefulWidget {
 }
 
 class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
+  List<String> productType = [
+    "Hat",
+    "Jacket",
+    "Tshirt",
+    "Pants",
+    "Shoes",
+    "Accessory"
+  ];
   /* TAB BAR VARIABLES*/
 
   // this will control the button clicks and tab changing
@@ -179,16 +187,9 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
     Stream<QuerySnapshot> _productsStream =
         FirebaseFirestore.instance.collection('Products').snapshots();
 
-    var productType = [
-      "Hat",
-      "Jacket",
-      "Tshirt",
-      "Pants",
-      "Shoes",
-      "Accessory"
-    ];
-
-    if (_controller.index == 1) {
+    if (_controller.index == 0) {
+      productType = ["Hat", "Jacket", "Tshirt", "Pants", "Shoes", "Accessory"];
+    } else if (_controller.index == 1) {
       productType = ["Hat"];
     } else if (_controller.index == 2) {
       productType = ["Jacket"];
@@ -197,6 +198,8 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
     } else if (_controller.index == 4) {
       productType = ["Accessory"];
     }
+
+    print(productType);
 
     return StreamBuilder<QuerySnapshot>(
       stream: _productsStream,
