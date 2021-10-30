@@ -59,7 +59,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
     FontAwesomeIcons.hatCowboySide,
     FontAwesomeIcons.tshirt,
     FontAwesomeIcons.socks,
-    FontAwesomeIcons.ring,
+    FontAwesomeIcons.shoppingBag,
   ];
 
   // active button's foreground color
@@ -129,41 +129,45 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
     return Column(
       children: <Widget>[
         Container(
+          margin: const EdgeInsets.only(
+              top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
           height: 49.0,
-          child: ListView.builder(
-            physics: BouncingScrollPhysics(),
-            controller: _scrollController,
-            scrollDirection: Axis.horizontal,
-            itemCount: _icons.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                key: _keys[index],
-                padding: EdgeInsets.all(6.0),
-                child: ButtonTheme(
-                  child: AnimatedBuilder(
-                    animation: _colorTweenBackgroundOn,
-                    builder: (context, child) => FlatButton(
-                      color: _getBackgroundColor(index),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(7.0),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _buttonTap = true;
-                          _controller.animateTo(index);
-                          _setCurrentIndex(index);
-                          _scrollTo(index);
-                        });
-                      },
-                      child: FaIcon(
-                        _icons[index],
-                        color: _getForegroundColor(index),
+          child: Scrollbar(
+            child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              itemCount: _icons.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  key: _keys[index],
+                  padding: EdgeInsets.all(6.0),
+                  child: ButtonTheme(
+                    child: AnimatedBuilder(
+                      animation: _colorTweenBackgroundOn,
+                      builder: (context, child) => FlatButton(
+                        color: _getBackgroundColor(index),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(7.0),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _buttonTap = true;
+                            _controller.animateTo(index);
+                            _setCurrentIndex(index);
+                            //_scrollTo(index);
+                          });
+                        },
+                        child: FaIcon(
+                          _icons[index],
+                          color: _getForegroundColor(index),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
         Flexible(
@@ -173,7 +177,6 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
               _generateProduct(),
               _generateProduct(),
               _generateProduct(),
-              //_generateProductShoes(),
               _generateProduct(),
               _generateProduct()
             ],
@@ -198,8 +201,6 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
     } else if (_controller.index == 4) {
       productType = ["Accessory"];
     }
-
-    print(productType);
 
     return StreamBuilder<QuerySnapshot>(
       stream: _productsStream,
@@ -237,15 +238,14 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(left: 5.0),
+                        padding: const EdgeInsets.only(left: 5.0, right: 5.0),
                         child: Image.network(
                           data["productImages"][0],
                           height: 100,
                           width: 100,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      Expanded(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,6 +261,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
                                     " (" +
                                     data["productSize"].toString() +
                                     ")",
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 16),
                                 textAlign: TextAlign.left),
@@ -272,7 +273,6 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-                      const Expanded(child: SizedBox()),
                       Padding(
                         padding: const EdgeInsets.only(right: 15.0),
                         child: IconButton(
@@ -335,7 +335,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
       // trigger the button animation
       _triggerAnimation();
       // scroll the TabBar to the correct position (if we have a scrollable bar)
-      _scrollTo(index);
+      //_scrollTo(index);
     }
   }
 
@@ -349,7 +349,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
     _animationControllerOff.forward();
   }
 
-  _scrollTo(int index) {
+  /*_scrollTo(int index) {
     // get the screen width. This is used to check if we have an element off screen
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -394,7 +394,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
     // scroll the calculated ammount
     _scrollController.animateTo(offset + _scrollController.offset,
         duration: new Duration(milliseconds: 150), curve: Curves.easeInOut);
-  }
+  }*/
 
   _getBackgroundColor(int index) {
     if (index == _currentIndex) {
