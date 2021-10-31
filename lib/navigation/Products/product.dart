@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_vinted_app/theme/light_color.dart';
 import 'package:fake_vinted_app/widget/extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class ProductScreen extends StatefulWidget {
   final String productId;
@@ -20,7 +19,7 @@ class _ProductScreenState extends State<ProductScreen>
   late String productBrand;
   late String productName;
   late String productSize;
-  late double productPrice;
+  late num productPrice;
   late String productDescription;
   late String productType;
 
@@ -122,47 +121,6 @@ class _ProductScreenState extends State<ProductScreen>
               ),
             ),
           );
-
-          /*return Container(
-            margin: EdgeInsets.all(15),
-            child: CarouselSlider.builder(
-              itemCount: imgList.length,
-              options: CarouselOptions(
-                enlargeCenterPage: true,
-                height: 300,
-                autoPlay: true,
-                autoPlayInterval: Duration(seconds: 3),
-                reverse: false,
-                aspectRatio: 5.0,
-              ),
-              itemBuilder: (context, i, id) {
-                //for onTap to redirect to another screen
-                return GestureDetector(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          color: Colors.black,
-                        )),
-                    //ClipRRect for image border radius
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Image.network(
-                        imgList[i],
-                        //width: 500,
-                        fit: BoxFit.fitWidth,
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    var url = imgList[i];
-                    print(url.toString());
-                  },
-                );
-              },
-            ),
-          );*/
-
         }
 
         return Text("loading");
@@ -205,12 +163,10 @@ class _ProductScreenState extends State<ProductScreen>
     return Container(
       margin: EdgeInsets.symmetric(vertical: 0),
       width: MediaQuery.of(context).size.width,
-      height: 80,
+      //height: 80,
       child: Wrap(
         alignment: WrapAlignment.center,
         runSpacing: 15.0,
-        //crossAxisAlignment: CrossAxisAlignment.start,
-        //mainAxisAlignment: MainAxisAlignment.center,
         children: imgList.map((x) => _thumbnail(x)).toList(),
       ),
     );
@@ -238,10 +194,15 @@ class _ProductScreenState extends State<ProductScreen>
             //color: Theme.of(context).backgroundColor,
           ),
           child: ClipRRect(
-              borderRadius: BorderRadius.circular(13.0),
-              child: Image.network(image)),
-        ).ripple(() {},
-            borderRadius: const BorderRadius.all(Radius.circular(13))),
+            borderRadius: BorderRadius.circular(13.0),
+            child: Image.network(image),
+          ),
+        ).ripple(
+          () {
+            print(image);
+          },
+          borderRadius: const BorderRadius.all(Radius.circular(13)),
+        ),
       ),
     );
   }
