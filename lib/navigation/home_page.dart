@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: selectedIndex,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.home),
             label: "Acheter",
           ),
           BottomNavigationBarItem(
