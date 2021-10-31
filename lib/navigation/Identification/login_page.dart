@@ -1,5 +1,5 @@
+import 'package:fake_vinted_app/navigation/Identification/register_page.dart';
 import 'package:fake_vinted_app/navigation/home_page.dart';
-import 'package:fake_vinted_app/navigation/register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

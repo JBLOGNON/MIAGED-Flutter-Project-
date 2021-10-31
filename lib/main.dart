@@ -1,4 +1,4 @@
-import 'package:fake_vinted_app/navigation/login_page.dart';
+import 'package:fake_vinted_app/navigation/Identification/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 

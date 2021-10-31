@@ -1,4 +1,4 @@
-import 'package:fake_vinted_app/navigation/login_page.dart';
+import 'package:fake_vinted_app/navigation/Identification/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
