@@ -1,8 +1,8 @@
 // ignore_for_file: unnecessary_this
 
-import 'package:fake_vinted_app/navigation/acheter.dart';
-import 'package:fake_vinted_app/navigation/panier.dart';
-import 'package:fake_vinted_app/navigation/profil.dart';
+import 'package:fake_vinted_app/navigation/Products/acheter.dart';
+import 'package:fake_vinted_app/navigation/Cart/panier.dart';
+import 'package:fake_vinted_app/navigation/Profil/profil.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

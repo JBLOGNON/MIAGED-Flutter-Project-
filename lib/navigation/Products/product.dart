@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_vinted_app/theme/light_color.dart';
+import 'package:fake_vinted_app/widget/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -12,7 +14,35 @@ class ProductScreen extends StatefulWidget {
   _ProductScreenState createState() => _ProductScreenState();
 }
 
-class _ProductScreenState extends State<ProductScreen> {
+class _ProductScreenState extends State<ProductScreen>
+    with TickerProviderStateMixin {
+  late List<dynamic> imgList;
+  late String productBrand;
+  late String productName;
+  late String productSize;
+  late double productPrice;
+  late String productDescription;
+  late String productType;
+
+  late AnimationController controller;
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    animation = Tween<double>(begin: 0, end: 1).animate(
+        CurvedAnimation(parent: controller, curve: Curves.easeInToLinear));
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Use the Todo to create the UI.
@@ -57,9 +87,43 @@ class _ProductScreenState extends State<ProductScreen> {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
 
-          List<dynamic> imgList = data["productImages"];
+          imgList = data["productImages"];
+          productBrand = data["productBrand"];
+          productName = data["productName"];
+          productDescription = data["productDescription"];
+          productType = data["productType"];
+          productPrice = data["productPrice"];
+          productSize = data["productSize"].toString();
 
-          return Container(
+          return Scaffold(
+            floatingActionButton: _flotingButton(),
+            body: SafeArea(
+              child: Container(
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                  colors: [
+                    Color(0xfffbfbfb),
+                    Color(0xfff7f7f7),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                )),
+                child: Stack(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        _productImage(),
+                        _categoryWidget(),
+                      ],
+                    ),
+                    //_detailWidget()
+                  ],
+                ),
+              ),
+            ),
+          );
+
+          /*return Container(
             margin: EdgeInsets.all(15),
             child: CarouselSlider.builder(
               itemCount: imgList.length,
@@ -97,11 +161,88 @@ class _ProductScreenState extends State<ProductScreen> {
                 );
               },
             ),
-          );
+          );*/
+
         }
 
         return Text("loading");
       },
+    );
+  }
+
+  FloatingActionButton _flotingButton() {
+    return FloatingActionButton(
+      onPressed: () {},
+      backgroundColor: LightColor.red,
+      child: Icon(Icons.shopping_basket,
+          color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
+    );
+  }
+
+  Widget _productImage() {
+    return AnimatedBuilder(
+      builder: (context, child) {
+        return AnimatedOpacity(
+          duration: Duration(milliseconds: 500),
+          opacity: animation.value,
+          child: child,
+        );
+      },
+      animation: animation,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: <Widget>[
+          Image.network(
+            imgList[0],
+            width: MediaQuery.of(context).size.width / 1.5,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _categoryWidget() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 0),
+      width: MediaQuery.of(context).size.width,
+      height: 80,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: Wrap(
+          children: imgList.map((x) => _thumbnail(x)).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget _thumbnail(String image) {
+    return AnimatedBuilder(
+      animation: animation,
+      //  builder: null,
+      builder: (context, child) => AnimatedOpacity(
+        opacity: animation.value,
+        duration: Duration(milliseconds: 500),
+        child: child,
+      ),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10),
+        child: Container(
+          height: 60,
+          width: 75,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: LightColor.grey,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(13)),
+            //color: Theme.of(context).backgroundColor,
+          ),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(13.0),
+              child: Image.network(image)),
+        ).ripple(() {},
+            borderRadius: const BorderRadius.all(Radius.circular(13))),
+      ),
     );
   }
 }
