@@ -206,12 +206,12 @@ class _ProductScreenState extends State<ProductScreen>
       margin: EdgeInsets.symmetric(vertical: 0),
       width: MediaQuery.of(context).size.width,
       height: 80,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: Wrap(
-          children: imgList.map((x) => _thumbnail(x)).toList(),
-        ),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        runSpacing: 15.0,
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        //mainAxisAlignment: MainAxisAlignment.center,
+        children: imgList.map((x) => _thumbnail(x)).toList(),
       ),
     );
   }
