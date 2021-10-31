@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_vinted_app/navigation/product.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -206,7 +207,15 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
                 child: InkWell(
                   splashColor: Colors.red.withAlpha(30),
                   borderRadius: BorderRadius.circular(15.0),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ProductScreen(productId: document.id),
+                      ),
+                    );
+                  },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
