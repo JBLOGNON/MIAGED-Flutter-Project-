@@ -256,7 +256,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
                                     color: Colors.black, fontSize: 16),
                                 textAlign: TextAlign.left),
                             Text(
-                              data["productPrice"].toString() + "€",
+                              data["productPrice"].toStringAsFixed(2) + "\$",
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 16),
                             ),

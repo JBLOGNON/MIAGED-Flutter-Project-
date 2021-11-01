@@ -244,7 +244,7 @@ class _ProductScreenState extends State<ProductScreen>
           ),
         ),
         Text(
-          widget.productPrice.toString(),
+          widget.productPrice.toStringAsFixed(2),
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20.0,
