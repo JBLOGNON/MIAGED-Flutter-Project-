@@ -211,8 +211,16 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            ProductScreen(productId: document.id),
+                        builder: (context) => ProductScreen(
+                          productId: document.id,
+                          productBrand: data["productBrand"],
+                          productName: data["productName"],
+                          productSize: data["productSize"].toString(),
+                          productPrice: data["productPrice"],
+                          productDescription: data["productDescription"],
+                          productType: data["productType"],
+                          imgList: data["productImages"],
+                        ),
                       ),
                     );
                   },

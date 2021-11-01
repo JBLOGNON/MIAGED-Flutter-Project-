@@ -1,13 +1,30 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_vinted_app/theme/light_color.dart';
-import 'package:fake_vinted_app/widget/extensions.dart';
 import 'package:flutter/material.dart';
 
 class ProductScreen extends StatefulWidget {
   final String productId;
-
+  final List<dynamic> imgList;
+  final String productBrand;
+  final String productName;
+  final String productSize;
+  final num productPrice;
+  final String productDescription;
+  final String productType;
   // In the constructor, require a Todo.
-  const ProductScreen({Key? key, required this.productId}) : super(key: key);
+  const ProductScreen(
+      {Key? key,
+      required this.productId,
+      required this.productBrand,
+      required this.productName,
+      required this.productSize,
+      required this.productPrice,
+      required this.productDescription,
+      required this.productType,
+      required this.imgList})
+      : super(key: key);
 
   @override
   _ProductScreenState createState() => _ProductScreenState();
@@ -15,16 +32,14 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen>
     with TickerProviderStateMixin {
-  late List<dynamic> imgList;
-  late String productBrand;
-  late String productName;
-  late String productSize;
-  late num productPrice;
-  late String productDescription;
-  late String productType;
+  List _isHovering = [false, false, false, false, false, false];
+  List _isSelected = [true, false, false, false, false, false];
 
   late AnimationController controller;
   late Animation<double> animation;
+
+  final CarouselController _controller = CarouselController();
+  int _current = 0;
 
   @override
   void initState() {
@@ -44,87 +59,104 @@ class _ProductScreenState extends State<ProductScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Use the Todo to create the UI.
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Miaged",
-            style: TextStyle(fontFamily: 'Roulette', fontSize: 50),
-            textAlign: TextAlign.center),
-      ),
-      body: _buildCarousel(),
-      /*Container(
-        padding: const EdgeInsets.all(16.0),
-        margin: const EdgeInsets.only(top: 50.0),
-        child: Column(
-          children: <Widget>[
-            Text(widget.productId),
-          ],
+        floatingActionButton: _flotingButton(),
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Miaged",
+              style: TextStyle(fontFamily: 'Roulette', fontSize: 50),
+              textAlign: TextAlign.center),
         ),
-      ),*/
-    );
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              _buildCarousel(),
+            ],
+          ),
+        ));
   }
 
   _buildCarousel() {
-    CollectionReference users =
-        FirebaseFirestore.instance.collection('Products');
+    var screenSize = MediaQuery.of(context).size;
+    var imageSliders = generateImageTiles(screenSize);
 
-    return FutureBuilder<DocumentSnapshot>(
-      future: users.doc(widget.productId).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return Text("Something went wrong");
-        }
-
-        if (snapshot.hasData && !snapshot.data!.exists) {
-          return Text("Document does not exist");
-        }
-
-        if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data =
-              snapshot.data!.data() as Map<String, dynamic>;
-
-          imgList = data["productImages"];
-          productBrand = data["productBrand"];
-          productName = data["productName"];
-          productDescription = data["productDescription"];
-          productType = data["productType"];
-          productPrice = data["productPrice"];
-          productSize = data["productSize"].toString();
-
-          return Scaffold(
-            floatingActionButton: _flotingButton(),
-            body: SafeArea(
-              child: Container(
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                  colors: [
-                    Color(0xfffbfbfb),
-                    Color(0xfff7f7f7),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                )),
-                child: Stack(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        _productImage(),
-                        _categoryWidget(),
+    return Container(
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(width: 2.0, color: LightColor.red),
+        ),
+        color: Colors.white,
+      ),
+      child: Column(
+        children: [
+          CarouselSlider(
+            items: imageSliders,
+            options: CarouselOptions(
+                enlargeCenterPage: true,
+                aspectRatio: 3 / 2,
+                autoPlay: true,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    _current = index;
+                    for (var i = 0; i < widget.imgList.length; i++) {
+                      if (i == index) {
+                        _isSelected[i] = true;
+                      } else {
+                        _isSelected[i] = false;
+                      }
+                    }
+                  });
+                }),
+            carouselController: _controller,
+          ),
+          Center(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: screenSize.width / 4,
+                  right: screenSize.width / 4,
+                ),
+                child: Card(
+                  //elevation: 5,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: screenSize.height / 150,
+                      bottom: screenSize.height / 150,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        for (var i = 0; i < widget.imgList.length; i++)
+                          Column(
+                            children: [
+                              Text(
+                                ".",
+                                style: TextStyle(fontSize: 30),
+                              ),
+                              Visibility(
+                                visible: _isSelected[i],
+                                child: Container(
+                                  height: 5,
+                                  width: screenSize.width / 40,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: LightColor.red),
+                                ),
+                              ),
+                            ],
+                          ),
                       ],
                     ),
-                    //_detailWidget()
-                  ],
+                  ),
                 ),
               ),
             ),
-          );
-        }
-
-        return Text("loading");
-      },
+          ),
+        ],
+      ),
     );
   }
 
@@ -137,73 +169,17 @@ class _ProductScreenState extends State<ProductScreen>
     );
   }
 
-  Widget _productImage() {
-    return AnimatedBuilder(
-      builder: (context, child) {
-        return AnimatedOpacity(
-          duration: Duration(milliseconds: 500),
-          opacity: animation.value,
-          child: child,
-        );
-      },
-      animation: animation,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: <Widget>[
-          Image.network(
-            imgList[0],
-            width: MediaQuery.of(context).size.width / 1.5,
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _categoryWidget() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 0),
-      width: MediaQuery.of(context).size.width,
-      //height: 80,
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        runSpacing: 15.0,
-        children: imgList.map((x) => _thumbnail(x)).toList(),
-      ),
-    );
-  }
-
-  Widget _thumbnail(String image) {
-    return AnimatedBuilder(
-      animation: animation,
-      //  builder: null,
-      builder: (context, child) => AnimatedOpacity(
-        opacity: animation.value,
-        duration: Duration(milliseconds: 500),
-        child: child,
-      ),
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        child: Container(
-          height: 60,
-          width: 75,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: LightColor.grey,
+  List<Widget> generateImageTiles(screenSize) {
+    return widget.imgList
+        .map(
+          (element) => ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: Image.network(
+              element,
+              fit: BoxFit.fitWidth,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(13)),
-            //color: Theme.of(context).backgroundColor,
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(13.0),
-            child: Image.network(image),
-          ),
-        ).ripple(
-          () {
-            print(image);
-          },
-          borderRadius: const BorderRadius.all(Radius.circular(13)),
-        ),
-      ),
-    );
+        )
+        .toList();
   }
 }
