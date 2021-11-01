@@ -58,94 +58,91 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _buildInputField() {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(15.0),
-            child: TextField(
-              controller: _email,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.person),
-                labelText: 'Email',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.red),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 3, color: Colors.red.shade900),
-                  borderRadius: BorderRadius.circular(15),
-                ),
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(15.0),
+          child: TextField(
+            controller: _email,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.person),
+              labelText: 'Email',
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 3, color: Colors.red),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 3, color: Colors.red.shade900),
+                borderRadius: BorderRadius.circular(15),
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(15.0),
-            child: TextField(
-              controller: _password,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.lock),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      hidePassword = !hidePassword;
-                      if (hidePassword) {
-                        visibilityIcon = const Icon(Icons.visibility);
-                      } else {
-                        visibilityIcon = const Icon(Icons.visibility_off);
-                      }
-                    });
-                  },
-                  icon: visibilityIcon,
-                ),
-                labelText: 'Password',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.red),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 3, color: Colors.red.shade900),
-                  borderRadius: BorderRadius.circular(15),
-                ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(15.0),
+          child: TextField(
+            controller: _password,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.lock),
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    hidePassword = !hidePassword;
+                    if (hidePassword) {
+                      visibilityIcon = const Icon(Icons.visibility);
+                    } else {
+                      visibilityIcon = const Icon(Icons.visibility_off);
+                    }
+                  });
+                },
+                icon: visibilityIcon,
               ),
-              obscureText: hidePassword,
+              labelText: 'Password',
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 3, color: Colors.red),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 3, color: Colors.red.shade900),
+                borderRadius: BorderRadius.circular(15),
+              ),
             ),
+            obscureText: hidePassword,
           ),
-          Container(
-            padding: const EdgeInsets.all(15.0),
-            child: TextField(
-              controller: _passwordConfirmation,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.lock),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      hideConfirmPassword = !hideConfirmPassword;
-                      if (hideConfirmPassword) {
-                        visibilityIconConfirm = const Icon(Icons.visibility);
-                      } else {
-                        visibilityIconConfirm =
-                            const Icon(Icons.visibility_off);
-                      }
-                    });
-                  },
-                  icon: visibilityIconConfirm,
-                ),
-                labelText: 'Confirm Password',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.red),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 3, color: Colors.red.shade900),
-                  borderRadius: BorderRadius.circular(15),
-                ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(15.0),
+          child: TextField(
+            controller: _passwordConfirmation,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.lock),
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    hideConfirmPassword = !hideConfirmPassword;
+                    if (hideConfirmPassword) {
+                      visibilityIconConfirm = const Icon(Icons.visibility);
+                    } else {
+                      visibilityIconConfirm = const Icon(Icons.visibility_off);
+                    }
+                  });
+                },
+                icon: visibilityIconConfirm,
               ),
-              obscureText: hideConfirmPassword,
+              labelText: 'Confirm Password',
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(width: 3, color: Colors.red),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 3, color: Colors.red.shade900),
+                borderRadius: BorderRadius.circular(15),
+              ),
             ),
-          )
-        ],
-      ),
+            obscureText: hideConfirmPassword,
+          ),
+        )
+      ],
     );
   }
 
@@ -183,7 +180,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
         var currentUser = FirebaseAuth.instance.currentUser;
 
-        Future<void> users = FirebaseFirestore.instance
+        FirebaseFirestore.instance
             .collection('UserInformations')
             .doc(currentUser!.uid)
             .set({
@@ -193,13 +190,14 @@ class _RegisterPageState extends State<RegisterPage> {
           'Postal': 'Entrez un code postal',
         });
 
-        Future<void> cart = FirebaseFirestore.instance
+        FirebaseFirestore.instance
             .collection('UserCart')
             .doc(currentUser.uid)
             .set({
           'cartTotalPrice': 0,
-          'productNumber': 0,
+          'productsNumber': [],
           'productsInCart': [],
+          'totalProducts': 0
         });
 
         Navigator.pushReplacement(context,

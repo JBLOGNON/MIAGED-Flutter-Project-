@@ -169,7 +169,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
     } else if (_controller.index == 1) {
       productType = ["Hat"];
     } else if (_controller.index == 2) {
-      productType = ["Jacket"];
+      productType = ["Jacket", "Tshirt", "Pants"];
     } else if (_controller.index == 3) {
       productType = ["Shoes"];
     } else if (_controller.index == 4) {

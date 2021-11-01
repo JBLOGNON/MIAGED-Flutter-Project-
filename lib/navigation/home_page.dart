@@ -15,10 +15,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
 
+  // ignore: unused_field
   static bool profilTextFieldEnable = false;
 
+  // ignore: non_constant_identifier_names, prefer_const_constructors, prefer_final_fields
   Widget _Acheter = Acheter();
+  // ignore: non_constant_identifier_names, prefer_const_constructors, prefer_final_fields
   Widget _Panier = Panier();
+  // ignore: non_constant_identifier_names, prefer_const_constructors, prefer_final_fields
   Widget _Profil = Profil();
 
   @override

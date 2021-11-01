@@ -1,8 +1,5 @@
-import 'dart:html';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carousel_slider/carousel_controller.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_vinted_app/theme/light_color.dart';
 import 'package:flutter/material.dart';
 
@@ -34,23 +31,40 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen>
     with TickerProviderStateMixin {
-  List _isHovering = [false, false, false, false, false, false];
-  List _isSelected = [true, false, false, false, false, false];
+  final List _isSelected = [
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
 
   late AnimationController controller;
   late Animation<double> animation;
 
   final CarouselController _controller = CarouselController();
+  // ignore: unused_field
   int _current = 0;
 
   @override
   void initState() {
     super.initState();
-    controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
     animation = Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(parent: controller, curve: Curves.easeInToLinear));
     controller.forward();
+
+    for (var i = 0; i < widget.imgList.length; i++) {
+      if (i == 0) {
+        _isSelected[i] = true;
+      } else {
+        _isSelected[i] = false;
+      }
+    }
   }
 
   @override
@@ -71,13 +85,11 @@ class _ProductScreenState extends State<ProductScreen>
             textAlign: TextAlign.center),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              _buildCarousel(),
-              _buildProductInfo(),
-            ],
-          ),
+        child: Column(
+          children: <Widget>[
+            _buildCarousel(),
+            _buildProductInfo(),
+          ],
         ),
       ),
     );
@@ -255,51 +267,60 @@ class _ProductScreenState extends State<ProductScreen>
   }
 
   _buildSize() {
+    var productSize = widget.productSize;
+    var sizeList = productSize.split("/");
+
     return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
-        decoration: BoxDecoration(
-          color: LightColor.red,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding:
-              EdgeInsets.only(top: 10.0, bottom: 10.0, left: 15.0, right: 15.0),
-          child: Text(
-            widget.productSize,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            for (var i = 0; i < sizeList.length; i++)
+              Container(
+                margin:
+                    const EdgeInsets.only(top: 20.0, bottom: 20.0, right: 10.0),
+                decoration: BoxDecoration(
+                  color: LightColor.red,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 10.0, bottom: 10.0, left: 15.0, right: 15.0),
+                  child: Text(
+                    sizeList[i],
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ));
   }
 
   _buildDescription() {
-    return Container(
-      child: Column(
-        children: [
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 5.0),
-              child: Text(
-                "Description:",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15.0,
-                ),
+    return Column(
+      children: [
+        const Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 5.0),
+            child: Text(
+              "Description:",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15.0,
               ),
             ),
           ),
-          Text(
-            widget.productDescription,
-            style: const TextStyle(fontSize: 12.0),
-          )
-        ],
-      ),
+        ),
+        Text(
+          widget.productDescription,
+          style: const TextStyle(
+            fontSize: 12.0,
+            height: 1.7,
+          ),
+        )
+      ],
     );
   }
 }

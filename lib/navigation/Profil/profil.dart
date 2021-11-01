@@ -61,12 +61,10 @@ class __ProfilState extends State<Profil> {
         children: <Widget>[
           _buildModificationButton(),
           _buildInformationField(),
-          Container(
-            child: Column(
-              children: <Widget>[
-                _buildLogout(context),
-              ],
-            ),
+          Column(
+            children: <Widget>[
+              _buildLogout(context),
+            ],
           ),
         ],
       ),
@@ -130,180 +128,176 @@ class __ProfilState extends State<Profil> {
           villeController.text = data['City'];
         } // A decommenter si on veut le loading circle
 
-        return Container(
-          child: Column(
-            children: <Widget>[
-              Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.always,
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 15.0, bottom: 20.0),
-                      child: Text(
-                        "Account Informations",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 117, 117, 117),
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
+        return Column(
+          children: <Widget>[
+            Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.always,
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 15.0, bottom: 20.0),
+                    child: Text(
+                      "Account Informations",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 117, 117, 117),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(
+                        top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                    child: TextFormField(
+                      controller: emailController,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.email),
+                        border: OutlineInputBorder(),
+                        fillColor: Colors.white,
+                        filled: true,
+                        labelText: 'Email',
+                        labelStyle: TextStyle(fontSize: 20),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                      child: TextFormField(
-                        controller: emailController,
-                        readOnly: true,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.email),
-                          border: OutlineInputBorder(),
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelText: 'Email',
-                          labelStyle: TextStyle(fontSize: 20),
-                        ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(
+                        top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                    child: TextFormField(
+                      controller: passwordController,
+                      enabled: profilEdit,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.lock),
+                        border: OutlineInputBorder(),
+                        fillColor: Colors.white,
+                        filled: true,
+                        labelText: 'Password',
+                        labelStyle: TextStyle(fontSize: 20),
+                        hintText: '********',
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                      child: TextFormField(
-                        controller: passwordController,
-                        enabled: profilEdit,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.lock),
-                          border: OutlineInputBorder(),
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelText: 'Password',
-                          labelStyle: TextStyle(fontSize: 20),
-                          hintText: '********',
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                        ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
+                    child: Text(
+                      "Personal Informations",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 117, 117, 117),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(
+                        top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                    child: TextFormField(
+                      controller: anniversaireController,
+                      enabled: profilEdit,
+                      validator: (value) {
+                        RegExp regexDate = RegExp(
+                            r'^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$');
+                        if (value!.isEmpty) {
+                          return "Field is Empty";
+                        } else if (!regexDate.hasMatch(value)) {
+                          return "Invalid date format";
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.cake),
+                        border: OutlineInputBorder(),
+                        fillColor: Colors.white,
+                        filled: true,
+                        labelText: 'Birthday',
+                        labelStyle: TextStyle(fontSize: 20),
+                      ),
+                      onTap: () async {
+                        var date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2100),
+                        );
+                        if (date == null) {
+                          DateTime.now().toString().substring(0, 10);
+                        } else {
+                          anniversaireController.text =
+                              date.toString().substring(0, 10);
+                        }
+                      },
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(
+                        top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                    child: TextFormField(
+                      controller: adresseController,
+                      enabled: profilEdit,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Field is Empty";
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.home),
+                        border: OutlineInputBorder(),
+                        fillColor: Colors.white,
+                        filled: true,
+                        labelText: 'Adress',
+                        labelStyle: TextStyle(fontSize: 20),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
-                      child: Text(
-                        "Personal Informations",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 117, 117, 117),
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(
+                        top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                    child: TextFormField(
+                      controller: zipCodeController,
+                      enabled: profilEdit,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Field is Empty";
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.fmd_good),
+                        border: OutlineInputBorder(),
+                        fillColor: Colors.white,
+                        filled: true,
+                        labelText: 'Zip Code',
+                        labelStyle: TextStyle(fontSize: 20),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                      child: TextFormField(
-                        controller: anniversaireController,
-                        enabled: profilEdit,
-                        validator: (value) {
-                          RegExp regexDate = RegExp(
-                              r'^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$');
-                          if (value!.isEmpty) {
-                            return "Field is Empty";
-                          } else if (!regexDate.hasMatch(value)) {
-                            return "Invalid date format";
-                          }
-                        },
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.cake),
-                          border: OutlineInputBorder(),
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelText: 'Birthday',
-                          labelStyle: TextStyle(fontSize: 20),
-                        ),
-                        onTap: () async {
-                          var date = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime(2100),
-                          );
-                          if (date == null) {
-                            DateTime.now().toString().substring(0, 10);
-                          } else {
-                            anniversaireController.text =
-                                date.toString().substring(0, 10);
-                          }
-                        },
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(
+                        top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
+                    child: TextFormField(
+                      controller: villeController,
+                      enabled: profilEdit,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Field is Empty";
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.location_city),
+                        border: OutlineInputBorder(),
+                        fillColor: Colors.white,
+                        filled: true,
+                        labelText: 'Town',
+                        labelStyle: TextStyle(fontSize: 20),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                      child: TextFormField(
-                        controller: adresseController,
-                        enabled: profilEdit,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Field is Empty";
-                          }
-                        },
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.home),
-                          border: OutlineInputBorder(),
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelText: 'Adress',
-                          labelStyle: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                      child: TextFormField(
-                        controller: zipCodeController,
-                        enabled: profilEdit,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Field is Empty";
-                          }
-                        },
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.fmd_good),
-                          border: OutlineInputBorder(),
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelText: 'Zip Code',
-                          labelStyle: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                          top: 5.0, bottom: 20.0, left: 5.0, right: 5.0),
-                      child: TextFormField(
-                        controller: villeController,
-                        enabled: profilEdit,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Field is Empty";
-                          }
-                        },
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.location_city),
-                          border: OutlineInputBorder(),
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelText: 'Town',
-                          labelStyle: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
