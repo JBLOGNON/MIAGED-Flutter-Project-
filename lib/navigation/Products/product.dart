@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -60,21 +62,25 @@ class _ProductScreenState extends State<ProductScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: _flotingButton(),
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Miaged",
-              style: TextStyle(fontFamily: 'Roulette', fontSize: 50),
-              textAlign: TextAlign.center),
-        ),
-        body: Container(
+      floatingActionButton: _flotingButton(),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Miaged",
+            style: TextStyle(fontFamily: 'Roulette', fontSize: 50),
+            textAlign: TextAlign.center),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
           child: Column(
             children: <Widget>[
               _buildCarousel(),
+              _buildProductInfo(),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   _buildCarousel() {
@@ -84,9 +90,9 @@ class _ProductScreenState extends State<ProductScreen>
     return Container(
       padding: const EdgeInsets.only(top: 10, bottom: 10),
       decoration: const BoxDecoration(
-        border: Border(
+        /*border: Border(
           bottom: BorderSide(width: 2.0, color: LightColor.red),
-        ),
+        ),*/
         color: Colors.white,
       ),
       child: Column(
@@ -132,7 +138,7 @@ class _ProductScreenState extends State<ProductScreen>
                         for (var i = 0; i < widget.imgList.length; i++)
                           Column(
                             children: [
-                              Text(
+                              const Text(
                                 ".",
                                 style: TextStyle(fontSize: 30),
                               ),
@@ -181,5 +187,119 @@ class _ProductScreenState extends State<ProductScreen>
           ),
         )
         .toList();
+  }
+
+  _buildProductInfo() {
+    return Container(
+      padding: const EdgeInsets.all(15.0),
+      margin: const EdgeInsets.all(15.0),
+      decoration: BoxDecoration(
+        border: Border.all(width: 2.0, color: LightColor.red),
+        borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(30.0),
+            topLeft: Radius.circular(30.0),
+            bottomLeft: Radius.circular(30.0),
+            bottomRight: Radius.circular(30.0)),
+      ),
+      child: Column(
+        children: [
+          _buildMainInfo(),
+          _buildSize(),
+          _buildDescription(),
+        ],
+      ),
+    );
+  }
+
+  _buildMainInfo() {
+    return Row(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.productBrand,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: LightColor.red,
+                fontSize: 25.0,
+              ),
+            ),
+            Text(
+              widget.productName,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15.0,
+              ),
+            ),
+          ],
+        ),
+        const Expanded(child: Text(" ")),
+        const Text(
+          "\$",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: LightColor.red,
+            fontSize: 15.0,
+          ),
+        ),
+        Text(
+          widget.productPrice.toString(),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20.0,
+          ),
+        ),
+      ],
+    );
+  }
+
+  _buildSize() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
+        decoration: BoxDecoration(
+          color: LightColor.red,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding:
+              EdgeInsets.only(top: 10.0, bottom: 10.0, left: 15.0, right: 15.0),
+          child: Text(
+            widget.productSize,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _buildDescription() {
+    return Container(
+      child: Column(
+        children: [
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 5.0),
+              child: Text(
+                "Description:",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15.0,
+                ),
+              ),
+            ),
+          ),
+          Text(
+            widget.productDescription,
+            style: const TextStyle(fontSize: 12.0),
+          )
+        ],
+      ),
+    );
   }
 }
