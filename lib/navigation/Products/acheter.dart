@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_vinted_app/navigation/Products/product.dart';
+import 'package:fake_vinted_app/services/cart_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -266,7 +267,17 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
                       Padding(
                         padding: const EdgeInsets.only(right: 15.0),
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            CartService().ajouterAuPanier(
+                                image: data["productImages"][0],
+                                prix: data["productPrice"],
+                                taille: data["productSize"],
+                                marque: data["productBrand"],
+                                nom: data["productName"],
+                                description: data["productDescription"],
+                                id: document.id);
+                            showAddToCartBanner();
+                          },
                           color: Colors.red,
                           icon: const Icon(
                             Icons.shopping_cart,
@@ -341,5 +352,24 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
     } else {
       return _foregroundOff;
     }
+  }
+
+  void showAddToCartBanner() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text(
+          'Article ajouté au panier.',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+        ),
+        backgroundColor: Colors.red[100],
+        action: SnackBarAction(
+          label: 'Ok',
+          textColor: Colors.red,
+          onPressed: () {
+            // Code to execute.
+          },
+        ),
+      ),
+    );
   }
 }

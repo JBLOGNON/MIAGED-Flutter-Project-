@@ -1,8 +1,9 @@
-import 'dart:html';
+import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_vinted_app/services/cart_service.dart';
 import 'package:fake_vinted_app/theme/light_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -185,7 +186,15 @@ class _ProductScreenState extends State<ProductScreen>
   FloatingActionButton _flotingButton() {
     return FloatingActionButton(
       onPressed: () {
-        _addToCart();
+        CartService().ajouterAuPanier(
+            image: widget.imgList[0],
+            prix: widget.productPrice,
+            taille: widget.productSize,
+            marque: widget.productBrand,
+            nom: widget.productName,
+            description: widget.productDescription,
+            id: widget.productId);
+        showAddToCartBanner();
       },
       backgroundColor: LightColor.red,
       child: Icon(Icons.shopping_basket,
@@ -356,5 +365,24 @@ class _ProductScreenState extends State<ProductScreen>
         "productsNumber": productsNumber,
       });*/
     }
+  }
+
+  void showAddToCartBanner() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text(
+          'Article ajouté au panier.',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+        ),
+        backgroundColor: Colors.red[100],
+        action: SnackBarAction(
+          label: 'Ok',
+          textColor: Colors.red,
+          onPressed: () {
+            // Code to execute.
+          },
+        ),
+      ),
+    );
   }
 }

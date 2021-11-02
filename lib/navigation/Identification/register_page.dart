@@ -190,16 +190,6 @@ class _RegisterPageState extends State<RegisterPage> {
           'Postal': 'Entrez un code postal',
         });
 
-        FirebaseFirestore.instance
-            .collection('UserCart')
-            .doc(currentUser.uid)
-            .set({
-          'cartTotalPrice': 0,
-          'productsNumber': [],
-          'productsInCart': [],
-          'totalProducts': 0
-        });
-
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const LoginForm()));
       } on FirebaseAuthException catch (e) {
