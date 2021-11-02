@@ -35,7 +35,7 @@ class CartService {
     return cart.snapshots();
   }
 
-  void supprimerArticlePanier({id}) {
+  void supprimerArticlePanier(id) {
     cart.doc(id).delete();
   }
 }
