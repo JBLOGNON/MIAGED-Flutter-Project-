@@ -11,7 +11,7 @@ Afin de pouvoir utiliser ce projet, vous devez avoir installé sur votre machine
 
 ## Screenshot
 
-Login Page            |  Register Page            | Product List Page| Product Page| Cart Page| Profil Page
+Connexion            |  Enregistrement            | Liste des Produits| Produits| Panier| Profil 
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![](./assets/screenshot/login_page.png)  |  ![](./assets/screenshot/register_page.png)|  ![](./assets/screenshot/product_list_page.png)|  ![](./assets/screenshot/product_page.png)|  ![](./assets/screenshot/cart_page.png)|  ![](./assets/screenshot/profil_page.png)
 
@@ -46,7 +46,7 @@ qui contient le nom de l’application, de deux champs et d’un bouton m’est 
 - [x] Au clic sur une entrée de la liste, le détail est affiché.
 - [x] Cette liste de vêtements est récupérée de la base de données.
 
-**Détail d’un vêtement ** : Critère d’acceptance
+**Détail d’un vêtement** : Critère d’acceptance
 
 - [x] La page de détail est composée des informations suivantes :
     - Une image,
@@ -88,7 +88,7 @@ est affichée avec les informations suivantes :
 - [x] Par défaut, l’entrée « Tous » est sélectionnée et tous les vêtements sont affichés.
 - [x] Au clic sur une des entrées, la liste est filtrée pour afficher seulement les vêtements correspondants à la catégorie sélectionnée.
 
-** Laisser libre cours à votre imagination**
+**Laisser libre cours à votre imagination**
 
 - [x] Ajout d'une page de creation de compte
     - L'utilisateur enseigne une adresse mail, un mot de passe et une confirmation du mot de passe.
