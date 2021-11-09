@@ -11,9 +11,9 @@ Afin de pouvoir utiliser ce projet, vous devez avoir installé sur votre machine
 
 ## Screenshot
 
-Connexion            |  Enregistrement            | Liste des Produits| Produits| Panier| Profil 
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-![](./assets/screenshot/login_page.png)  |  ![](./assets/screenshot/register_page.png)|  ![](./assets/screenshot/product_list_page.png)|  ![](./assets/screenshot/product_page.png)|  ![](./assets/screenshot/cart_page.png)|  ![](./assets/screenshot/profil_page.png)
+Connexion|Liste des Produits|Produits|Panier|Profil 
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+![](./assets/screenshot/login_page.png)|![](./assets/screenshot/product_list_page.png)|  ![](./assets/screenshot/product_page.png)|  ![](./assets/screenshot/cart_page.png)|  ![](./assets/screenshot/profil_page.png)
 
 ## Realisation
 
