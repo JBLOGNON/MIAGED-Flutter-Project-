@@ -11,9 +11,14 @@ Afin de pouvoir utiliser ce projet, vous devez avoir installé sur votre machine
 
 ## Screenshot
 
-Connexion|Liste des Produits|Produits|Panier|Profil 
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-![](./assets/screenshot/login_page.png)|![](./assets/screenshot/product_list_page.png)|  ![](./assets/screenshot/product_page.png)|  ![](./assets/screenshot/cart_page.png)|  ![](./assets/screenshot/profil_page.png)
+<p float="left">
+  <img src="./assets/screenshot/login_page.png" width="100" />
+  <img src="./assets/screenshot/register_page.png" width="100" /> 
+  <img src="./assets/screenshot/product_list_page.png" width="100" />
+  <img src="./assets/screenshot/product_page.png" width="100" />
+  <img src="./assets/screenshot/cart_page.png" width="100" />
+  <img src="./assets/screenshot/profil_page.png" width="100" />
+</p>
 
 ## Realisation
 
