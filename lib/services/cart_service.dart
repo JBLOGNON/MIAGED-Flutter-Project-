@@ -4,17 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 FirebaseFirestore db = FirebaseFirestore.instance;
 String userID = FirebaseAuth.instance.currentUser!.uid;
 CollectionReference cart =
-    db.collection('UserInformations').doc('$userID').collection('UserCart');
+    db.collection('UserInformations').doc(userID).collection('UserCart');
 
 class CartService {
   Future<void> ajouterAuPanier(
       {image, prix, taille, marque, nom, description, id}) async {
-    bool productExistInUserCart = false;
     var quantiteAlreadyInCart = 1;
 
     await cart.doc(id).get().then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        productExistInUserCart = true;
         quantiteAlreadyInCart = documentSnapshot["quantite"] + 1;
       }
     });

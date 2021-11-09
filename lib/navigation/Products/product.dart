@@ -2,10 +2,8 @@ import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carousel_slider/carousel_controller.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_vinted_app/services/cart_service.dart';
 import 'package:fake_vinted_app/theme/light_color.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -337,34 +335,6 @@ class _ProductScreenState extends State<ProductScreen>
         )
       ],
     );
-  }
-
-  _addToCart() async {
-    var indexProduit = -1;
-
-    num cartTotalPrice = 0;
-    num totalProducts = 0;
-    List<String> productsInCart = [];
-    List<num> productsNumber = [];
-
-    var currentUser = FirebaseAuth.instance.currentUser;
-    CollectionReference cart =
-        FirebaseFirestore.instance.collection('UserCart');
-
-    //TODO recupurer le document panier de l'utilisateur
-
-    //Verification de si le produit a deja un exemplaire dans le panier
-    for (var i = 0; i < productsInCart.length; i++) {
-      if (productsInCart[i] == widget.productId) {
-        productsNumber[i]++;
-      }
-    }
-
-    if (indexProduit != -1) {
-      /*cart.doc(currentUser.uid).update({
-        "productsNumber": productsNumber,
-      });*/
-    }
   }
 
   void showAddToCartBanner() {
