@@ -1,4 +1,5 @@
 import 'package:fake_vinted_app/navigation/Identification/login_page.dart';
+import 'package:fake_vinted_app/services/profil_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class __ProfilState extends State<Profil> {
       ),
       child: Column(
         children: <Widget>[
-          _buildModificationButton(),
+          _buildButton(),
           _buildInformationField(),
           Column(
             children: <Widget>[
@@ -71,11 +72,27 @@ class __ProfilState extends State<Profil> {
     );
   }
 
-  Widget _buildModificationButton() {
+  Widget _buildButton() {
     return Container(
       margin: const EdgeInsets.only(bottom: 15.0),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                // TODO Information Button
+              });
+            },
+            child: const Icon(Icons.info, color: Colors.white),
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(15),
+            ),
+          ),
+          Container(width: 10),
+          ProfilImage(imageBlob: '', imageBlobBackRef: (value) => {}),
+          Container(width: 10),
           ElevatedButton(
             onPressed: () {
               setState(() {
@@ -94,9 +111,9 @@ class __ProfilState extends State<Profil> {
                 : const Icon(Icons.create, color: Colors.white),
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(15),
             ),
-          )
+          ),
         ],
       ),
     );
