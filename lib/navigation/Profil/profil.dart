@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:fake_vinted_app/navigation/Identification/login_page.dart';
 import 'package:fake_vinted_app/services/profil_image.dart';
+import 'package:fake_vinted_app/services/profil_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as path;
 
 class Profil extends StatefulWidget {
   const Profil({Key? key}) : super(key: key);
@@ -26,6 +31,7 @@ class __ProfilState extends State<Profil> {
   TextEditingController villeController = TextEditingController();
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseStorage storage = FirebaseStorage.instance;
   var currentUser = FirebaseAuth.instance.currentUser;
 
   CollectionReference users =
@@ -80,9 +86,8 @@ class __ProfilState extends State<Profil> {
         children: <Widget>[
           ElevatedButton(
             onPressed: () {
-              setState(() {
-                // TODO Information Button
-              });
+              showMyDialog("Information",
+                  "To edit your profil click on the pen button, edit with your informations and accept with the validation button");
             },
             child: const Icon(Icons.info, color: Colors.white),
             style: ElevatedButton.styleFrom(
@@ -91,7 +96,51 @@ class __ProfilState extends State<Profil> {
             ),
           ),
           Container(width: 10),
-          ProfilImage(imageBlob: '', imageBlobBackRef: (value) => {}),
+          FutureBuilder<DocumentSnapshot>(
+            future: users.doc(currentUser!.uid).get(),
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return const Text("Something went wrong");
+              }
+
+              if (snapshot.hasData && !snapshot.data!.exists) {
+                return const Text("Document does not exist");
+              }
+
+              if (snapshot.connectionState == ConnectionState.done) {
+                Map<String, dynamic> data =
+                    snapshot.data!.data() as Map<String, dynamic>;
+                return ProfilImage(
+                  imageBlob: data['profilAvatar'],
+                  imageBlobBackRef: (value) async {
+                    String fileName = path.basename(value.path);
+                    File imageFile = File(value.path);
+
+                    await storage.ref("profilAvatar/" + fileName).putFile(
+                        imageFile,
+                        SettableMetadata(customMetadata: {
+                          'uploaded_by': 'A bad guy',
+                          'description': 'Some description...'
+                        }));
+
+                    var myImage =
+                        storage.ref().child("profilAvatar/" + fileName);
+                    String fileUrl = await myImage.getDownloadURL();
+
+                    try {
+                      users.doc(currentUser!.uid).update({
+                        "profilAvatar": fileUrl,
+                      });
+                    } catch (e) {
+                      showMyDialog("Error", e.toString());
+                    }
+                  },
+                );
+              }
+              return const Text('data');
+            },
+          ),
           Container(width: 10),
           ElevatedButton(
             onPressed: () {

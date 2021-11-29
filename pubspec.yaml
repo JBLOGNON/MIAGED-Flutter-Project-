@@ -41,6 +41,9 @@ dependencies:
   google_fonts: ^2.1.0
   carousel_slider: ^4.0.0
   image_picker: ^0.8.4+4
+  firebase_storage: ^10.1.0
+  path: ^1.8.0
+
 
 dev_dependencies:
   flutter_test:
