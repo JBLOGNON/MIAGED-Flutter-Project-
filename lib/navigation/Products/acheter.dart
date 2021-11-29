@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Acheter extends StatefulWidget {
-  const Acheter({Key? key}) : super(key: key);
+  final bool gridlist;
+  const Acheter({Key? key, required this.gridlist}) : super(key: key);
 
   @override
   __AcheterState createState() => __AcheterState();
@@ -60,6 +61,8 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
   final List _keys = [];
 
   bool _buttonTap = false;
+
+  bool gridView = false;
 
   @override
   void initState() {
@@ -188,85 +191,183 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
           return const Text(" ");
         }
 
-        return ListView(
-          children: snapshot.data!.docs
-              .where((DocumentSnapshot documentSnapshot) =>
-                  productType.contains(documentSnapshot["productType"]))
-              .map((DocumentSnapshot document) {
-            Map<String, dynamic> data =
-                document.data()! as Map<String, dynamic>;
-            return Container(
-              margin: const EdgeInsets.only(
-                  top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
+        if (widget.gridlist == false) {
+          return ListView(
+            children: snapshot.data!.docs
+                .where((DocumentSnapshot documentSnapshot) =>
+                    productType.contains(documentSnapshot["productType"]))
+                .map((DocumentSnapshot document) {
+              Map<String, dynamic> data =
+                  document.data()! as Map<String, dynamic>;
+              return Container(
+                margin: const EdgeInsets.only(
+                    top: 10.0, bottom: 10.0, left: 20.0, right: 20.0),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      side: BorderSide(
+                        color: Colors.grey.withOpacity(0.3),
+                        width: 2,
+                      )),
+                  child: InkWell(
+                    splashColor: Colors.red.withAlpha(30),
+                    borderRadius: BorderRadius.circular(15.0),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductScreen(
+                            productId: document.id,
+                            productBrand: data["productBrand"],
+                            productName: data["productName"],
+                            productSize: data["productSize"].toString(),
+                            productPrice: data["productPrice"],
+                            productDescription: data["productDescription"],
+                            productType: data["productType"],
+                            imgList: data["productImages"],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                          child: Image.network(
+                            data["productImages"][0],
+                            height: 100,
+                            width: 100,
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                data["productBrand"],
+                                style: const TextStyle(
+                                    color: Colors.red, fontSize: 18),
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(
+                                  data["productName"] +
+                                      " (" +
+                                      data["productSize"].toString() +
+                                      ")",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                  textAlign: TextAlign.left),
+                              Text(
+                                data["productPrice"].toStringAsFixed(2) + "\$",
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15.0),
+                          child: IconButton(
+                            onPressed: () {
+                              CartService().ajouterAuPanier(
+                                  image: data["productImages"][0],
+                                  prix: data["productPrice"],
+                                  taille: data["productSize"],
+                                  marque: data["productBrand"],
+                                  nom: data["productName"],
+                                  description: data["productDescription"],
+                                  id: document.id);
+                              showAddToCartBanner();
+                            },
+                            color: Colors.red,
+                            icon: const Icon(
+                              Icons.shopping_cart,
+                              size: 25,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          );
+        } else {
+          return GridView.count(
+            crossAxisCount: 2,
+            /*childAspectRatio: ((MediaQuery.of(context).size.height / 2) /
+                    (MediaQuery.of(context).size.width / 2)) /
+                2.5,*/
+            children: snapshot.data!.docs
+                .where((DocumentSnapshot documentSnapshot) =>
+                    productType.contains(documentSnapshot["productType"]))
+                .map((DocumentSnapshot document) {
+              Map<String, dynamic> data =
+                  document.data()! as Map<String, dynamic>;
+              return Container(
+                child: Card(
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                     side: BorderSide(
                       color: Colors.grey.withOpacity(0.3),
                       width: 2,
-                    )),
-                child: InkWell(
-                  splashColor: Colors.red.withAlpha(30),
-                  borderRadius: BorderRadius.circular(15.0),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductScreen(
-                          productId: document.id,
-                          productBrand: data["productBrand"],
-                          productName: data["productName"],
-                          productSize: data["productSize"].toString(),
-                          productPrice: data["productPrice"],
-                          productDescription: data["productDescription"],
-                          productType: data["productType"],
-                          imgList: data["productImages"],
+                    ),
+                  ),
+                  child: InkWell(
+                    splashColor: Colors.red.withAlpha(30),
+                    borderRadius: BorderRadius.circular(15.0),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductScreen(
+                            productId: document.id,
+                            productBrand: data["productBrand"],
+                            productName: data["productName"],
+                            productSize: data["productSize"].toString(),
+                            productPrice: data["productPrice"],
+                            productDescription: data["productDescription"],
+                            productType: data["productType"],
+                            imgList: data["productImages"],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-                        child: Image.network(
-                          data["productImages"][0],
-                          height: 100,
-                          width: 100,
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                          child: Image.network(
+                            data["productImages"][0],
+                            height: 100,
+                            width: 100,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              data["productBrand"],
-                              style: const TextStyle(
-                                  color: Colors.red, fontSize: 18),
-                              textAlign: TextAlign.left,
-                            ),
-                            Text(
-                                data["productName"] +
-                                    " (" +
-                                    data["productSize"].toString() +
-                                    ")",
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 16),
-                                textAlign: TextAlign.left),
-                            Text(
-                              data["productPrice"].toStringAsFixed(2) + "\$",
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 16),
-                            ),
-                          ],
+                        Text(
+                          data["productBrand"],
+                          style:
+                              const TextStyle(color: Colors.red, fontSize: 18),
+                          textAlign: TextAlign.left,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15.0),
-                        child: IconButton(
+                        Text(
+                            data["productName"] +
+                                " (" +
+                                data["productSize"].toString() +
+                                ")",
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 16),
+                            textAlign: TextAlign.left),
+                        Text(
+                          data["productPrice"].toStringAsFixed(2) + "\$",
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 16),
+                        ),
+                        IconButton(
                           onPressed: () {
                             CartService().ajouterAuPanier(
                                 image: data["productImages"][0],
@@ -284,14 +385,14 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
                             size: 25,
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          }).toList(),
-        );
+              );
+            }).toList(),
+          );
+        }
       },
     );
   }

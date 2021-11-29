@@ -18,8 +18,11 @@ class _HomePageState extends State<HomePage> {
   // ignore: unused_field
   static bool profilTextFieldEnable = false;
 
+  bool gridlist = false;
+
   // ignore: non_constant_identifier_names, prefer_const_constructors, prefer_final_fields
-  Widget _Acheter = Acheter();
+  Widget _AcheterList = Acheter(gridlist: false);
+  Widget _AcheterGrid = Acheter(gridlist: true);
   // ignore: non_constant_identifier_names, prefer_const_constructors, prefer_final_fields
   Widget _Panier = Panier();
   // ignore: non_constant_identifier_names, prefer_const_constructors, prefer_final_fields
@@ -33,6 +36,22 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Miaged",
             style: TextStyle(fontFamily: 'Roulette', fontSize: 50),
             textAlign: TextAlign.center),
+        actions: <Widget>[
+          if (selectedIndex == 0)
+            Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    gridlist = !gridlist;
+                  });
+                },
+                child: gridlist
+                    ? const Icon(Icons.grid_view, color: Colors.white)
+                    : const Icon(Icons.view_list, color: Colors.white),
+              ),
+            ),
+        ],
       ),
       body: getBody(),
       bottomNavigationBar: BottomNavigationBar(
@@ -66,8 +85,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget getBody() {
-    if (selectedIndex == 0) {
-      return _Acheter;
+    if (selectedIndex == 0 && gridlist == false) {
+      return _AcheterList;
+    } else if (selectedIndex == 0 && gridlist == true) {
+      return _AcheterGrid;
     } else if (selectedIndex == 1) {
       return _Panier;
     } else {
