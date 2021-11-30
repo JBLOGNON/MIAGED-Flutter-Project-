@@ -299,9 +299,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
         } else {
           return GridView.count(
             crossAxisCount: 2,
-            /*childAspectRatio: ((MediaQuery.of(context).size.height / 2) /
-                    (MediaQuery.of(context).size.width / 2)) /
-                2.5,*/
+            childAspectRatio: (MediaQuery.of(context).size.width / 2) / 230,
             children: snapshot.data!.docs
                 .where((DocumentSnapshot documentSnapshot) =>
                     productType.contains(documentSnapshot["productType"]))
@@ -309,6 +307,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
               Map<String, dynamic> data =
                   document.data()! as Map<String, dynamic>;
               return Container(
+                height: 200,
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),

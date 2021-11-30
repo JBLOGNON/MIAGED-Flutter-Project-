@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                     gridlist = !gridlist;
                   });
                 },
-                child: gridlist
+                child: !gridlist
                     ? const Icon(Icons.grid_view, color: Colors.white)
                     : const Icon(Icons.view_list, color: Colors.white),
               ),
