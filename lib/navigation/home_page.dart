@@ -60,11 +60,11 @@ class _HomePageState extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: "Acheter",
+            label: "Buy",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_basket),
-            label: "Panier",
+            label: "Cart",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

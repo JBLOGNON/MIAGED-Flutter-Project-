@@ -18,15 +18,7 @@ class __PanierState extends State<Panier> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: /* Column(
-        children: [
-          Expanded(
-            child:*/
-          _generateCart(),
-      /*),
-          _genarateTotal(),
-        ],
-      ),*/
+      body: _generateCart(),
     );
   }
 
@@ -39,7 +31,7 @@ class __PanierState extends State<Panier> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Loading");
+          return const Center(child: CircularProgressIndicator());
         }
 
         totalPrice = 0;
@@ -54,6 +46,7 @@ class __PanierState extends State<Panier> {
         } else {
           return Column(
             children: [
+              _generateCartHeader(),
               Expanded(
                 child: ListView(
                   children:
@@ -159,6 +152,25 @@ class __PanierState extends State<Panier> {
         ),
       ),
     );
+  }
+
+  _generateCartHeader() {
+    return Padding(
+        padding: const EdgeInsets.only(top: 15.0),
+        child: Column(
+          children: const [
+            Text("Your Cart",
+                style: TextStyle(fontFamily: 'Roulette', fontSize: 30),
+                textAlign: TextAlign.center),
+            Divider(
+              height: 20,
+              thickness: 5,
+              indent: 20,
+              endIndent: 20,
+              color: LightColor.red,
+            )
+          ],
+        ));
   }
 
   _genarateTotal() {
