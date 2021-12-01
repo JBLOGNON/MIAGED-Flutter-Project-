@@ -282,7 +282,9 @@ class __ProfilState extends State<Profil> {
                       onTap: () async {
                         var date = await showDatePicker(
                           context: context,
-                          initialDate: DateTime.now(),
+                          initialDate: anniversaireController.text == ""
+                              ? DateTime.now()
+                              : DateTime.parse(anniversaireController.text),
                           firstDate: DateTime(1900),
                           lastDate: DateTime(2100),
                         );
