@@ -150,6 +150,7 @@ class __AcheterState extends State<Acheter> with TickerProviderStateMixin {
         ),
         Flexible(
           child: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
             controller: _controller,
             children: <Widget>[
               _generateProduct(),
