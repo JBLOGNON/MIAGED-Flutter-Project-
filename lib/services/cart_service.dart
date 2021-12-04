@@ -1,23 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-FirebaseFirestore db = FirebaseFirestore.instance;
-String userID = FirebaseAuth.instance.currentUser!.uid;
-CollectionReference cart =
-    db.collection('UserInformations').doc(userID).collection('UserCart');
-
 class CartService {
   Future<void> ajouterAuPanier(
       {image, prix, taille, marque, nom, description, id}) async {
     var quantiteAlreadyInCart = 1;
 
-    await cart.doc(id).get().then((DocumentSnapshot documentSnapshot) {
+    await FirebaseFirestore.instance
+        .collection('UserInformations')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('UserCart')
+        .doc(id)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         quantiteAlreadyInCart = documentSnapshot["quantite"] + 1;
       }
     });
 
-    cart.doc(id).set({
+    FirebaseFirestore.instance
+        .collection('UserInformations')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('UserCart')
+        .doc(id)
+        .set({
       "image": image,
       "prix": prix,
       "taille": taille,
@@ -30,10 +36,19 @@ class CartService {
   }
 
   Stream<QuerySnapshot> getPanier() {
-    return cart.snapshots();
+    return FirebaseFirestore.instance
+        .collection('UserInformations')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('UserCart')
+        .snapshots();
   }
 
   void supprimerArticlePanier(id) {
-    cart.doc(id).delete();
+    FirebaseFirestore.instance
+        .collection('UserInformations')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('UserCart')
+        .doc(id)
+        .delete();
   }
 }

@@ -112,7 +112,7 @@ class __ProfilState extends State<Profil> {
                 Map<String, dynamic> data =
                     snapshot.data!.data() as Map<String, dynamic>;
                 return ProfilImage(
-                  imageBlob: data['profilAvatar'],
+                  imageBlob: data['profilAvatar'] ?? "",
                   imageBlobBackRef: (value) async {
                     String fileName = path.basename(value.path);
                     File imageFile = File(value.path);
