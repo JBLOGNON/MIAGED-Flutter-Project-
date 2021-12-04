@@ -45,21 +45,14 @@ qui contient le nom de l’application, de deux champs et d’un bouton m’est 
 - [x] La page actuelle est la page Acheter. Son icone et son texte sont d’une couleur différente des autres entrées.
 - [x] Une liste déroulante de tous les vêtements m’est proposé à l’écran.
 - [x] Chaque vêtement affiche les informations suivantes :
-    - Une image (ne pas gérer les images dans l’application, seulement insérer des liens vers des images d’internet),
-    - Un titre,
-    - La taille,
-    - Le prix
+    - Une image (ne pas gérer les images dans l’application, seulement insérer des liens vers des images d’internet), un titre, une taille, un prix
 - [x] Au clic sur une entrée de la liste, le détail est affiché.
 - [x] Cette liste de vêtements est récupérée de la base de données.
 
 **Détail d’un vêtement** : Critère d’acceptance
 
 - [x] La page de détail est composée des informations suivantes :
-    - Une image,
-    - Un titre,
-    - La taille,
-    - La marque,
-    - Le prix
+    - Une image, un titre, une taille, une marque, un prix
 - [x] La page est également composée d’un bouton « Retour » pour retourner à la liste des vétements et d’un bouton « Ajouter au panier », ajoutant le vêtement dans le panier de
 l’utilisateur (ajout en base).
 
@@ -67,10 +60,7 @@ l’utilisateur (ajout en base).
 
 - [x] Au clic sur le bouton « Panier », la liste des vêtements du panier de l’utilisateur
 est affichée avec les informations suivantes :
-    - Une image (ne pas gérer les images dans l’application, seulement insérer des liens vers des images d’internet),
-    - Un titre,
-    - La taille,
-    - Le prix
+    - Une image, un titre, une taille, un prix
 - [x] Un total général est affiché à l’utilisateur (somme de tous les vêtements du panier).
 - [x] A droite de chaque vetement, une croix permet à l’utilisateur de retirer un produit. Au clic sur celle-ci, le produit est retiré de la liste et le total général mis à jour.
 - [x] Aucun autre bouton d’action n’est présent sur la page (pas de paiement pour le moment).
@@ -105,3 +95,8 @@ est affichée avec les informations suivantes :
 - [x] Ajout d'une option sur la page d'acceuil permettant d'afficher les produit sous differents formats:
     - En liste 
     - En grid
+- [x] Ajout de message type "pop-up" (ex: lors de la modification du profil)
+- [x] Ajouts mineurs
+    - Champs supplementaire pour les produits (ex: description)
+    - Utilisation de [Snackbar](https://api.flutter.dev/flutter/material/SnackBar-class.html)
+    - Utilisation d'un [DatePicker](https://api.flutter.dev/flutter/material/showDatePicker.html) pour selectionner sa date de naissance
