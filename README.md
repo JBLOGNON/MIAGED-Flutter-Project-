@@ -15,6 +15,7 @@ Afin de pouvoir utiliser ce projet, vous devez avoir installé sur votre machine
   <img src="./assets/screenshot/login_page.png" width="200" />
   <img src="./assets/screenshot/register_page.png" width="200" /> 
   <img src="./assets/screenshot/product_list_page.png" width="200" />
+  <img src="./assets/screenshot/product_list_page_2.png" width="200" />
   <img src="./assets/screenshot/product_page.png" width="200" />
   <img src="./assets/screenshot/cart_page.png" width="200" />
   <img src="./assets/screenshot/profil_page.png" width="200" />
@@ -99,3 +100,8 @@ est affichée avec les informations suivantes :
     - L'utilisateur enseigne une adresse mail, un mot de passe et une confirmation du mot de passe.
     - Si l'utilisateur remplis correctement les champs et que le mot de passe et asser securisé, le compte et enregistrer en base de donnée.
 - [x] Ajout d'un carousel dans la page de produit afin d'afficher les differentes images de ce dernier.
+- [x] Ajout d'une photo de profil pour l'utilisateur.
+    - L'utilisateur peut uploader une nouvelle photo
+- [x] Ajout d'une option sur la page d'acceuil permettant d'afficher les produit sous differents formats:
+    - En liste 
+    - En grid
